@@ -1,34 +1,30 @@
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createStackNavigator } from "@react-navigation/stack";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Home from "./components/Home";
+import "react-native-url-polyfill/auto"
+import { useState, useEffect } from "react"
+import { supabase } from "./lib/supabase"
+import Auth from "./components/Auth"
+import Account from "./components/Account"
+import { View } from "react-native"
 
-const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
+export default function App() {
+  const [session, setSession] = useState(null)
 
-const HomeTabs = () => {
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+    })
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+  }, [])
+
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="Home" component={Home} />
-      {/* To add more screen for bottom navigator
-      Example: User Profile, Pet Profile, Settings, Messages, About  */}
-    </Tab.Navigator>
-  );
-};
-
-const App = () => {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator >
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="Home" component={HomeTabs} options />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
-
-export default App;
+    <View>
+      {session && session.user ? (
+        <Account key={session.user.id} session={session} />
+      ) : (
+        <Auth />
+      )}
+    </View>
+  )
+}
