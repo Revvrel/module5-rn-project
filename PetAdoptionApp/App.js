@@ -34,11 +34,11 @@ export default function App() {
             {(props) => <Account {...props} session={session} />}
           </Stack.Screen>
         ) : (
-          //<Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="Login" component={Login} />
+          //<Stack.Screen name="Home" component={Home} />
         )}
 
-        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="LoginPage" component={Login} />
