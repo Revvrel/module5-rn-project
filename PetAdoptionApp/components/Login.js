@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { TouchableOpacity, View, TextInput, Button, Text } from "react-native";
 import { supabase } from "../lib/supabase";
 import { useNavigation } from "@react-navigation/native";
-import Register from "./Register";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -59,16 +58,28 @@ export default function Login() {
         onPress={handleLogin}
         disabled={loading}
       />
-      <Text size="md">Don't have an account?</Text>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("Register");
-        }}
-      >
-        <Text fontWeight="bold" style={{ marginLeft: 5 }}>
-          Register here
-        </Text>
-      </TouchableOpacity>
+      <View style={{ marginVertical: 10 }} />
+      <View>
+        <Text size="md">Don't have an account?</Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Register");
+          }}
+        >
+          <Text>Click here to create a new account</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={{ marginVertical: 10 }} />
+      <View>
+        <Text size="md">Forget Password?</Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("ForgetPassword");
+          }}
+        >
+          <Text>Click here to reset password</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
