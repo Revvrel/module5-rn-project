@@ -1,15 +1,10 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-const Home = ({ route }) => {
-  // const { username } = route.params;
-
+export default function Home() {
   return (
-    <View>
-      {/* <Text>Welcome to the app, {username}</Text> */}
-      <Text>Welcome to the app</Text>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>Home Screen!</Text>
     </View>
   );
-};
-
-export default Home;
+}
