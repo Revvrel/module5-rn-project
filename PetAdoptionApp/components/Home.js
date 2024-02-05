@@ -1,10 +1,51 @@
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import React from 'react';
-import { View, Text } from 'react-native';
+import { Matches, Messages, Profile, SwipeHome } from "../screens";
 
-export default function Home() {
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+
+const Home = () => {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Home Screen!</Text>
-    </View>
+    <NavigationContainer independent={true}>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Tab"
+          options={{ headerShown: false, animationEnabled: false }}
+        >
+          {() => (
+            <Tab.Navigator>
+              <Tab.Screen
+                name="SwipeHome"
+                component={SwipeHome}
+
+              />
+
+              <Tab.Screen
+                name="Matches"
+                component={Matches}
+
+              />
+
+              <Tab.Screen
+                name="Messages"
+                component={Messages}
+              />
+
+              <Tab.Screen
+                name="Profile"
+                component={Profile}
+
+              />
+            </Tab.Navigator>
+          )}
+        </Stack.Screen>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
+
 }
+
+export default Home;
