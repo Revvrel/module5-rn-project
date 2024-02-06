@@ -1,15 +1,16 @@
-import "react-native-url-polyfill/auto";
-import { useState, useEffect } from "react";
-import { supabase } from "./lib/supabase";
-import Account from "./components/Account";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import Login from "./components/Login";
-import Home from "./components/Home";
-import Register from "./components/Register";
+import React, { useEffect, useState } from "react";
+import "react-native-url-polyfill/auto";
 import ForgetPassword from "./components/ForgetPassword";
+import Home from "./components/Home";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import { supabase } from "./lib/supabase";
 
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -27,17 +28,21 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-      {session && session.user ? (
-          <Stack.Screen name="Account">
-            {(props) => <Account {...props} session={session} />}
-          </Stack.Screen>
+        {!session || !session.user ? (
+          // Screen for logged in users only
+          <Stack.Group>
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
+          </Stack.Group>
         ) : (
-          <Stack.Screen name="Login" component={Login} />
+          //{(props) => <Account {...props} session={session} />}
+          //</Stack.Screen>
+          // Authentication Screen
+          <Stack.Group>
+            <Stack.Screen name="Home" component={Home} />
+          </Stack.Group>
         )}
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
-        <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="LoginPage" component={Login} />
       </Stack.Navigator>
     </NavigationContainer>
   );
