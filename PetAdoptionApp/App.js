@@ -30,9 +30,9 @@ export default function App() {
     <NavigationContainer >
       <Stack.Navigator>
         {session && session.user ? (
-          <Stack.Screen name="Account">
-            {(props) => <Account {...props} session={session} />}
-          </Stack.Screen>
+          <Stack.Screen name="Main Page" component={Home} />
+           //{(props) => <Account {...props} session={session} />}
+          //</Stack.Screen>
         ) : (
           <Stack.Screen name="Login" component={Login} />
           //<Stack.Screen name="Home" component={Home} />
