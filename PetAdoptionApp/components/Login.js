@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TouchableOpacity, View, TextInput, Button, Text } from "react-native";
 import { supabase } from "../lib/supabase";
 import { useNavigation } from "@react-navigation/native";
+import { color } from "@rneui/base";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -78,6 +79,14 @@ export default function Login() {
           }}
         >
           <Text>Click here to reset password</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Home");
+          }}
+        >
+          <Text style={{color:'blue'}}>Go to HomePage</Text>
         </TouchableOpacity>
       </View>
     </View>
