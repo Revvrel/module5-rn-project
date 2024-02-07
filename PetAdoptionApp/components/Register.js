@@ -23,7 +23,7 @@ export default function Register() {
     } else {
       if (!error) {
         setLoading(false);
-        alert("Registration successful. Redirect to login page");
+        alert("Registration successful. Redirect to login page");        
         navigation.navigate("Login");
       }
       if (error) {
@@ -82,7 +82,7 @@ export default function Register() {
         >
           Login here
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity>     
     </View>
   );
 }
