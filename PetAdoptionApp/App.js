@@ -9,7 +9,6 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import { supabase } from "./lib/supabase";
 import PetProfile from "./screens/Pet/PetProfile";
-import Account from './components/Account';
 
 
 const Stack = createStackNavigator();
@@ -37,14 +36,15 @@ export default function App() {
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} />
             <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
+            <Stack.Screen name="PetProfile" component={PetProfile} />
           </Stack.Group>
         ) : (
           //{(props) => <Account {...props} session={session} />}
           //</Stack.Screen>
           // Authentication Screen
           <Stack.Group>
-            <Stack.Screen name="Home" component={Home} />
-          </Stack.Group>
+            <Stack.Screen name="Home" component={Home} />            
+          </Stack.Group>          
         )}
       </Stack.Navigator>
     </NavigationContainer>
