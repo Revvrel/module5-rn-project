@@ -3,6 +3,7 @@ import { TouchableOpacity, View, TextInput, Button, Text } from "react-native";
 import { supabase } from "../lib/supabase";
 import { useNavigation } from "@react-navigation/native";
 import { color } from "@rneui/base";
+import PetProfile from "../screens/Pet/PetProfile";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -80,13 +81,13 @@ export default function Login() {
         >
           <Text>Click here to reset password</Text>
         </TouchableOpacity>
-
+      
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("Home");
+            navigation.navigate("PetProfile");
           }}
         >
-          <Text style={{color:'blue'}}>Go to HomePage</Text>
+          <Text style={{color:'blue'}}>Go to pet profile page</Text>
         </TouchableOpacity>
       </View>
     </View>
