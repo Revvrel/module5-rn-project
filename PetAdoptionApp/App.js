@@ -29,25 +29,24 @@ export default function App() {
   }, []);
 
   return (
-    <NavigationContainer >
+    <NavigationContainer>
       <Stack.Navigator>
-        {session && session.user ? (
-          <Stack.Screen name="Account">
-            {(props) => <Account {...props} session={session} />}
-          </Stack.Screen>
+        {!session || !session.user ? (
+          // Screen for logged in users only
+          <Stack.Group>
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
+          </Stack.Group>
         ) : (
-          <Stack.Screen name="Login" component={Login} />
-          //<Stack.Screen name="Home" component={Home} />
+          //{(props) => <Account {...props} session={session} />}
+          //</Stack.Screen>
+          // Authentication Screen
+          <Stack.Group>
+            <Stack.Screen name="Home" component={Home} />
+          </Stack.Group>
         )}
-
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
-        <Stack.Screen name="Register" component={Register} />        
-        <Stack.Screen name="LoginPage" component={Login} /> 
-        <Stack.Screen name="PetProfile" component={PetProfile} />      
-        <Stack.Screen name="UserProfile" component={Account} />      
       </Stack.Navigator>
-
     </NavigationContainer>
   );
 }
