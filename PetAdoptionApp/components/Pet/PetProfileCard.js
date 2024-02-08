@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 
-const PetProfileCard  = ({pet_profiles}) => {
+const PetProfileCard  = ({pet_profiles}) => { 
+    const { name, breed, weight } = pet_profiles; 
     return(
-        <View style={StyleSheet.petprofilecard}>
-            <Text>{pet_profiles.name}</Text>
-            <Text>{pet_profiles.breed}</Text>
-            <Text>{pet_profiles.weight}</Text>
+        <View style={StyleSheet.petProfileCard}>
+            <Text>{name}</Text>
+            <Text>{breed}</Text>
+            <Text>{weight}</Text>
         </View>
     )
 }

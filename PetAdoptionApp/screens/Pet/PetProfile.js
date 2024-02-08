@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { supabase } from "../../lib/supabase";
-import PetProfileCard from "../../components/Pet/PetProfileCard";
 
 const Stack = createStackNavigator();
 
@@ -35,20 +34,21 @@ const PetProfile = () => {
 
   return (
     <NavigationContainer independent={true}>
-      <View style={styles.container}>
-        {/* <Text>Open up App.js to start working on your app!</Text>
-        <StatusBar style="auto" />  */}
+      <View style={styles.container}>      
         {fetchError && <Text>{fetchError}</Text>}
         {petProfiles && (
-          <View style={styles.pet_profile}>
-            {petProfiles.map((petProfiles) => (
-              //<text>petProfiles.name</text>
-              <PetProfileCard key={petProfiles.id} pet_profiles={petProfiles} />
+          <View style={styles.pet}>
+            {petProfiles.map( profile => (
+               <View key={profile.id} style={styles.petProfileCard}>
+               
+               <Text key={`name_${profile.id}`}>Name: {profile.name}</Text>
+               <Text key={`weight_${profile.id}`}>Weight: {profile.weight}</Text>
+               <Text key={`age_${profile.id}`}>Age: {profile.age}</Text>
+              
+             </View>              
             ))}
           </View>
-        )}
-        {/* <Text>Data fetched from Supabase:</Text>
-        <Text>{JSON.stringify(data)}</Text> */}
+        )}     
       </View>
     </NavigationContainer>
   );
