@@ -58,10 +58,12 @@ export default function App() {
           <Tab.Screen name="Register" component={Register} />
           <Tab.Screen name="ForgetPassword" component={ForgetPassword} />
           <Tab.Screen name="Help" component={Help} />
+          <Tab.Screen name="PetProfile" component={PetProfile} options={{tabBarButton: ()=> null}} />
         </Tab.Navigator>
       ) : (
         <Stack.Navigator>
           <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
+          <Stack.Screen name="PetProfile" component={PetProfile} />
           <Stack.Screen name="Login" component={Login} />
         </Stack.Navigator>
       )}
