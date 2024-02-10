@@ -66,23 +66,7 @@ export default function Register() {
         title={loading ? "Loading" : "Create an account"}
         onPress={handleRegister}
         disabled={loading}
-      />
-      <Text>Already have an account?</Text>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("Login");
-        }}
-      >
-        <Text
-          size="md"
-          fontWeight="bold"
-          style={{
-            marginLeft: 5,
-          }}
-        >
-          Login here
-        </Text>
-      </TouchableOpacity>     
+      />   
     </View>
   );
 }
