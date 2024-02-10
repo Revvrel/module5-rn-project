@@ -31,6 +31,8 @@ export default function App() {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      console.log(session);
+      console.log(session.user.email);
     });
 
     supabase.auth.onAuthStateChange((_event, session) => {

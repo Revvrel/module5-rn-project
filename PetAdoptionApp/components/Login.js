@@ -3,7 +3,6 @@ import { TouchableOpacity, View, TextInput, Button, Text } from "react-native";
 import { supabase } from "../lib/supabase";
 import { useNavigation } from "@react-navigation/native";
 import { color } from "@rneui/base";
-import PetProfile from "../screens/Pet/PetProfile";
 
 export default function Login() {
   const [email, setEmail] = useState("");
