@@ -11,14 +11,22 @@ import Help from "./components/Help";
 import { supabase } from "./lib/supabase";
 import PetProfile from "./screens/Pet/PetProfile";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import WelcomePage from "./components/WelcomePage";
-import { SwipeHome } from "./screens";
+import WelcomeScreen from "./components/WelcomeScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [session, setSession] = useState(null);
+  const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -29,6 +37,10 @@ export default function App() {
       setSession(session);
     });
   }, []);
+
+  if (showSplash) {
+    return <WelcomeScreen />;
+  }
 
   return (
     <NavigationContainer>
@@ -54,15 +66,27 @@ export default function App() {
           })}
         >
           <Tab.Screen name="Login" component={Login} />
-          <Tab.Screen name="Home" component={Home} options={{tabBarButton: ()=> null}} />
+          <Tab.Screen
+            name="Home"
+            component={Home}
+            options={{ tabBarButton: () => null }}
+          />
           <Tab.Screen name="Register" component={Register} />
           <Tab.Screen name="ForgetPassword" component={ForgetPassword} />
           <Tab.Screen name="Help" component={Help} />
-          <Tab.Screen name="PetProfile" component={PetProfile} options={{tabBarButton: ()=> null}} />
+          <Tab.Screen
+            name="PetProfile"
+            component={PetProfile}
+            options={{ tabBarButton: () => null }}
+          />
         </Tab.Navigator>
       ) : (
         <Stack.Navigator>
-          <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen name="PetProfile" component={PetProfile} />
           <Stack.Screen name="Login" component={Login} />
         </Stack.Navigator>
