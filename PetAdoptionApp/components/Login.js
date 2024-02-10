@@ -62,32 +62,12 @@ export default function Login() {
       />
       <View style={{ marginVertical: 10 }} />
       <View>
-        <Text size="md">Don't have an account?</Text>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Register");
-          }}
-        >
-          <Text>Click here to create a new account</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={{ marginVertical: 10 }} />
-      <View>
-        <Text size="md">Forget Password?</Text>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("ForgetPassword");
-          }}
-        >
-          <Text>Click here to reset password</Text>
-        </TouchableOpacity>
-      
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("PetProfile");
           }}
         >
-          <Text style={{color:'blue'}}>Go to pet profile page</Text>
+          <Text style={{ color: "blue" }}>Go to pet profile page</Text>
         </TouchableOpacity>
       </View>
     </View>
