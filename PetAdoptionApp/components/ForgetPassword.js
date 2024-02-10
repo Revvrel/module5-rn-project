@@ -44,23 +44,6 @@ export default function ForgetPassword() {
         }}
         disabled={loading}
       />
-      <View style={{ marginVertical: 10 }} />
-      <Text>Already have an account?</Text>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("Login");
-        }}
-      >
-        <Text
-          size="md"
-          fontWeight="bold"
-          style={{
-            marginLeft: 5,
-          }}
-        >
-          Login here
-        </Text>
-      </TouchableOpacity>
     </View>
   );
 }
