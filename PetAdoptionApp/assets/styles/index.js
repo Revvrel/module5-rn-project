@@ -3,9 +3,9 @@ import { Dimensions, StyleSheet } from "react-native";
 export const PRIMARY_COLOR = "#7444C0";
 export const SECONDARY_COLOR = "#5636B8";
 export const WHITE = "#FFFFFF";
-export const GRAY = "#757E90";
+export const GRAY = "#F5F0EE";
 export const DARK_GRAY = "#363636";
-export const BLACK = "#000000";
+export const BLACK = "#4B413E";
 
 export const ONLINE_STATUS = "#46A575";
 export const OFFLINE_STATUS = "#D04949";
@@ -18,7 +18,45 @@ export const FLASH_ACTIONS = "#5028D7";
 export const DIMENSION_WIDTH = Dimensions.get("window").width;
 export const DIMENSION_HEIGHT = Dimensions.get("window").height;
 
-export default StyleSheet.create({
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 20,
+        flexDirection: 'column',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        textAlign: 'center',
+        backgroundColor: 'white',
+    },
+    View: {
+        fontFamily: 'Poppins-Regular',
+    },
+    Text: {
+        fontFamily: 'Poppins-Regular',
+    },
+    h1: {
+        fontFamily: 'Poppins-Bold',
+        fontWeight: 'bold',
+        fontSize: 30,
+        paddingBottom: 20,
+        textAlign: 'center',
+        color: '#4B413E',
+    },
+    input: {
+        height: 55,
+        margin: 10,
+        borderWidth: 1,
+        borderColor: '#F5F0EE',
+        color: '#B6A6A1',
+        padding: 20,
+        borderRadius: 50,
+        backgroundColor: '#F7F8F9',
+        width: 370,
+        flexDirection: 'column',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+
+    },
     // COMPONENT - CARD ITEM
     containerCardItem: {
         backgroundColor: WHITE,
@@ -300,3 +338,5 @@ export default StyleSheet.create({
         alignItems: "center",
     },
 });
+
+export { styles }
