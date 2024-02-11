@@ -10,6 +10,12 @@ import Help from "./Help";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+async function fetchSession() {
+  const { data: { session } } = await supabase.auth.getSession();
+  setSession(session);
+  console.log(session.user.email);
+}
+
 function HomeTabNavigator() {
   return (
     <Tab.Navigator
