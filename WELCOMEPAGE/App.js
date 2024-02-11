@@ -17,7 +17,8 @@ export default function App() {
       <View style={styles.appNameContainer}>
       <Text style={[styles.appName, { fontSize: 50, shadowColor:'blue100',color: 'purple' }]}>PAWFECT PALOOZA:</Text>
       <Text style={[styles.appName, styles.subTitle, { fontSize: 45, shadowColor:'blue100',color:'purple' }]}>Whisker Wonderland Edition</Text>
-      <StatusBar style="auto" />
+        <StatusBar style="auto" />
+        <Text>Test</Text>
       <Image style={styles.image} source={pomeranian1Png} />
       <Image style={styles.image} source={pomeranian2Png} />
       <Image style={styles.image} source={ragdollPng} />
