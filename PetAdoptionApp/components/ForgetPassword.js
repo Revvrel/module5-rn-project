@@ -31,11 +31,15 @@ export default function ForgetPassword() {
   }
 
   async function handleVerifyOTP() {
-    const {error} = await supabase.auth.verifyOtp({email:email, token:verificationCode, type:'email'});
+    const {session, data, error} = await supabase.auth.verifyOtp({email:email, token:verificationCode, type:'email'});
+    console.log("Session show here: ", session);
+    console.log("Data show here: ", data.session.user.email);
+    console.log("Error show here: ", error);
     if (error) {
       Alert.alert("Error", error.message);
       return;
     }
+    setShowVerificationInput(false);
     setShowPasswordInputs(true);
     Alert.alert("Success", "OTP successful");
   }

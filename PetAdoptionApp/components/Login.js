@@ -13,6 +13,7 @@ export default function Login() {
 
   async function handleLogin() {
     setLoading(true);
+
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email: email,
@@ -21,7 +22,7 @@ export default function Login() {
 
       if (!error) {
         setLoading(false);
-        alert("Login successful. Redirect to home page");
+        alert("Login successful. Welcome " + email);
         navigation.navigate("Home");
       } else {
         setLoading(false);
@@ -59,6 +60,7 @@ export default function Login() {
         onPress={handleLogin}
         disabled={loading}
       />
+
       <View style={{ marginVertical: 10 }} />
       <View>
         <TouchableOpacity

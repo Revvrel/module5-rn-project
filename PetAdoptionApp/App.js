@@ -3,15 +3,18 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 import "react-native-url-polyfill/auto";
+import { supabase } from "./lib/supabase";
+
 import ForgetPassword from "./components/ForgetPassword";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Help from "./components/Help";
-import { supabase } from "./lib/supabase";
-import PetProfile from "./screens/Pet/PetProfile";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import WelcomeScreen from "./components/WelcomeScreen";
+import PetProfile from "./screens/Pet/PetProfile";
+
+import Ionicons from "react-native-vector-icons/Ionicons";
+
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
