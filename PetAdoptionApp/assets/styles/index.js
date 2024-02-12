@@ -1,6 +1,6 @@
 import { Dimensions, StyleSheet } from "react-native";
 
-export const PRIMARY_COLOR = "#7444C0";
+export const PRIMARY_COLOR = "#FFB197";
 export const SECONDARY_COLOR = "#5636B8";
 export const WHITE = "#FFFFFF";
 export const GRAY = "#F5F0EE";
@@ -27,12 +27,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         textAlign: 'center',
         backgroundColor: 'white',
+        fontSize: 15
     },
     View: {
         fontFamily: 'Poppins-Regular',
     },
     Text: {
         fontFamily: 'Poppins-Regular',
+    },
+    link: {
+        textDecorationLine: 'underline',
+        color: "#FFB197",
+        fontSize: 15
     },
     h1: {
         fontFamily: 'Poppins-Bold',
@@ -56,6 +62,22 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         justifyContent: 'center',
 
+    },
+    button: {
+        backgroundColor: '#FFB197',
+        color: 'white',
+        padding: 20,
+        borderRadius: 50,
+        width: 370,
+        flexDirection: 'column',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        height: 55,
+        margin: 10,
+
+    },
+    listTitle: {
+        fontWeight: 'bold',
     },
     // COMPONENT - CARD ITEM
     containerCardItem: {
