@@ -4,17 +4,16 @@ import {
   StyleSheet,
   Text,
   View,
-  ScrollView,
-  Button,
+  ScrollView,  
 } from "react-native";
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import { PaperProvider, TextInput } from "react-native-paper";
+import { Button } from '@rneui/themed';
 import supabase from "../../config/supabaseClient/";
-import { Input } from "react-native-elements";
 
 // const CustomLabel = ({ children, color }) => (
 //   <Text style={{ color }}>{children}</Text>
@@ -66,10 +65,7 @@ export default function PetInfo() {
       alert(errMessage);
     }
     
-    setTimeout(() => {
-      alert("Form Submitted!");
-    }, 1000);
-
+    alert("Form Submitted!");
   };  
 
   return (
@@ -77,8 +73,8 @@ export default function PetInfo() {
       theme={{
         colors: {
           background: "#F6F6F6", // Change the background color of the label
-          primary: "#6200EE", // Change the primary color of the label
-          text: "#6200EE", // Change the text color of the label
+          primary: "#FFB197", // Change the primary color of the label
+          text: "#FFB197", // Change the text color of the label
         },
       }}
     >
@@ -104,8 +100,7 @@ export default function PetInfo() {
               onChangeText={(name) => setName(name)}
             />
             <TextInput
-              style={styles.input}
-              labelStyle={styles.label} // Apply the labelStyle prop
+              style={styles.input}              
               label="Breed"
               mode="outlined"
               value={breed}
@@ -142,19 +137,30 @@ export default function PetInfo() {
             <TextInput
               style={styles.input}
               label="Location"
-              mode="outlined"
+              mode="outlined"              
               value={location}
               onChangeText={(location) => setLocation(location)}
             />
             <TextInput
-              style={styles.input}
+              style={styles.input}              
               label="Gender"
               mode="outlined"
               value={gender}
               onChangeText={(gender) => setGender(gender)}
             />
           </View>
-          <Button title="Submit form" onPress={handleSubmit} />
+          <Button buttonStyle={{
+                backgroundColor: '#FFB197',
+          borderRadius: 50,
+          padding: 10,
+          height: 50,
+              }}
+        containerStyle={{
+          width: 150,
+          justifyContent: 'center',
+          marginHorizontal: 120,
+                marginVertical: 5,
+              }} title="Submit" onPress={handleSubmit} />
           <View style={{ marginVertical: 10 }} />
           <View>
             <TouchableOpacity
@@ -174,7 +180,7 @@ export default function PetInfo() {
 const styles = StyleSheet.create({
   scrollViewContent: {
     flexGrow: 1,
-    backgroundColor: "#F4E4FF",
+    //backgroundColor: "#F4E4FF",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -182,14 +188,11 @@ const styles = StyleSheet.create({
     width: 300,
     marginBottom: 10,
     borderRadius: 12, // Curving the edges
-    overflow: "hidden", // Ensure the border-radius is applied correctly
+    //overflow: "hidden", // Ensure the border-radius is applied correctly
   },
-  input: {
+  input: {        
     width: 300,
-    fontSize: 22,
-    marginBottom: 10,
-  },
-  label: {
-    fontWeight: "500", // Set the font weight to lighter (300)
+    fontSize: 15,  
+    marginBottom: 5,
   },
 });
