@@ -23,8 +23,6 @@ const PetProfile = ({ navigation }) => {
   const [fetchError, setFetchError] = useState(null);
   const [petProfiles, setPetProfiles] = useState(null);
 
-  const [petName, setPetName] = useState(null);
-
   useEffect(() => {
     //An "async" function, this allow us to use "await"
     const fetchPetProfiles = async () => {
@@ -180,6 +178,7 @@ const PetProfile = ({ navigation }) => {
               }}
             >
               <Icon name="map-marker" color={COLORS.primary} size={20} />
+              
               <Text style={{ fontSize: 14, color: COLORS.grey, marginLeft: 5 }}>
                 10880 Malibu Point, 90265
               </Text>

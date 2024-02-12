@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { supabase } from "../lib/supabase";
+import { styles } from "../assets/styles/index.js";
+import { Button } from '@rneui/themed';
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -33,25 +35,27 @@ export default function Register() {
     }
   }
   return (
-    <View>
-      <Text>Register</Text>
+    <View style={styles.container}>
+      <Text style={styles.h1}>Register to get started!</Text>
       <TextInput
-        placeholder="Enter your email"
+        placeholder="Email"
         value={email}
         autoCapitalize="none"
         autoComplete="off"
         autoCorrect={false}
         keyboardType="email-address"
         onChangeText={(text) => setEmail(text)}
+        style={styles.input}
       />
       <TextInput
-        placeholder="Enter your password"
+        placeholder="Password"
         value={password}
         autoCapitalize="none"
         autoCompleteType="off"
         autoCorrect={false}
         secureTextEntry={true}
         onChangeText={(text) => setPassword(text)}
+        style={styles.input}
       />
       <TextInput
         placeholder="Confirm your password"
@@ -61,12 +65,37 @@ export default function Register() {
         autoCorrect={false}
         secureTextEntry={true}
         onChangeText={(text) => setConfirmPassword(text)}
+        style={styles.input}
       />
       <Button
         title={loading ? "Loading" : "Create an account"}
         onPress={handleRegister}
         disabled={loading}
+        buttonStyle={{
+                backgroundColor: '#FFB197',
+          borderRadius: 50,
+          padding: 15,
+          height: 55,
+              }}
+        containerStyle={{
+          width: 200,
+          justifyContent: 'center',
+          marginHorizontal: 90,
+                marginVertical: 10,
+              }}
       />   
+
+      <View style={{ marginVertical: 10 }} />
+      <View style={{textAlign: 'center', flexDirection: 'row',justifyContent: 'center' }}>
+        <Text style={{ fontSize: 16 }}>Have an account? </Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Register");
+          }}
+        >
+          <Text style={styles.link}>Log In</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
