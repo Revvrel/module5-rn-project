@@ -22,10 +22,12 @@
     "@supabase/supabase-js": "^2.39.3",
     "expo": "~50.0.6",
     "expo-camera": "~14.0.4",
+    "expo-font": "~11.10.2",
     "expo-image": "~1.10.6",
     "expo-image-manipulator": "~11.8.0",
     "expo-image-picker": "~14.7.1",
     "expo-local-authentication": "~13.8.0",
+    "expo-splash-screen": "~0.26.4",
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
     "react-dom": "^18.2.0",
@@ -34,14 +36,13 @@
     "react-native-elements": "^3.4.3",
     "react-native-gesture-handler": "~2.14.0",
     "react-native-pager-view": "6.2.3",
+    "react-native-paper": "^5.12.3",
     "react-native-reanimated": "~3.6.2",
     "react-native-safe-area-context": "4.8.2",
     "react-native-screens": "~3.29.0",
     "react-native-url-polyfill": "^2.0.0",
     "react-native-vector-icons": "^10.0.3",
-    "react-native-web": "^0.19.10",
-    "expo-splash-screen": "~0.26.4",
-    "expo-font": "~11.10.2"
+    "react-native-web": "^0.19.10"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

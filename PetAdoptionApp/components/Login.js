@@ -63,10 +63,10 @@ export default function Login() {
       <View>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("PetProfile");
+            navigation.navigate("PetInfo");
           }}
         >
-          <Text style={{ color: "blue" }}>Go to pet profile page</Text>
+          <Text style={{ color: "blue" }}>Go to pet info page</Text>
         </TouchableOpacity>
       </View>
     </View>

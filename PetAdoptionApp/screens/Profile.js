@@ -31,7 +31,7 @@ export default function Profile() {
   return (
     <View>
       <View style={{ marginVertical: 10 }} />
-      <Text>Welcome, {session.user.email}</Text>
+      {/* <Text>Welcome, {session.user.email}</Text> */}
       <View style={{ marginVertical: 10 }} />
       <Button title="Logout" onPress={handleLogout} />
     </View>
