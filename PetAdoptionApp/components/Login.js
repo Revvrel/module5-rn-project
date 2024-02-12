@@ -66,7 +66,6 @@ export default function Login() {
         title={loading ? "Loading" : "Login"}
         onPress={handleLogin}
         disabled={loading}
-        style={{justifyContent: 'center'}}
         buttonStyle={{
                 backgroundColor: '#FFB197',
           borderRadius: 50,
