@@ -32,7 +32,6 @@ export default function App() {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       console.log(session);
-      console.log(session.user.email);
     });
 
     supabase.auth.onAuthStateChange((_event, session) => {
