@@ -39,3 +39,6 @@ yarn-error.*
 #PetProfile
 PetProfile.js.*
 PetProfileCard.js.*
+
+#Petinfo
+PetInfo.js.*
