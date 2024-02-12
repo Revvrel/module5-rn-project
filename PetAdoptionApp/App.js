@@ -33,7 +33,6 @@ export default function App() {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       console.log(session);
-      console.log(session.user.email);
     });
 
     supabase.auth.onAuthStateChange((_event, session) => {
@@ -64,8 +63,8 @@ export default function App() {
               }
               return <Ionicons name={iconName} size={size} color={color} />;
             },
-            tabBarActiveTintColor: "red",
-            tabBarInactiveTintColor: "blue",
+            tabBarActiveTintColor: "#4B413E",
+            tabBarInactiveTintColor: "#B6A6A1",
           })}
         >
           <Tab.Screen name="Login" component={Login} />

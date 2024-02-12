@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { TouchableOpacity, View, TextInput, Button, Text } from "react-native";
+import { TouchableOpacity, View, TextInput, Button, Text, StyleSheet } from "react-native";
 import { supabase } from "../lib/supabase";
 import { useNavigation } from "@react-navigation/native";
 import { color } from "@rneui/base";
+import { Input } from '@rneui/themed';
+import { styles } from "../assets/styles/index";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -35,24 +37,27 @@ export default function Login() {
   }
 
   return (
-    <View>
+    <View style={styles.container}>
+      <Text style={styles.h1}>Welcome Back!</Text>
       <TextInput
-        placeholder="Enter your email"
+        placeholder="Email"
         value={email}
         autoCapitalize="none"
         autoCompleteType="off"
         autoCorrect={false}
         keyboardType="email-address"
         onChangeText={(text) => setEmail(text)}
+        style={styles.input}
       />
       <TextInput
-        placeholder="Enter your password"
+        placeholder="Password"
         value={password}
         autoCapitalize="none"
         autoCompleteType="off"
         autoCorrect={false}
         secureTextEntry={true}
         onChangeText={(text) => setPassword(text)}
+        style={styles.input}
       />
       <Button
         title={loading ? "Loading" : "Login"}
