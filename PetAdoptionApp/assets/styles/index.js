@@ -76,6 +76,9 @@ const styles = StyleSheet.create({
         margin: 10,
 
     },
+    listTitle: {
+        fontWeight: 'bold',
+    },
     // COMPONENT - CARD ITEM
     containerCardItem: {
         backgroundColor: WHITE,
