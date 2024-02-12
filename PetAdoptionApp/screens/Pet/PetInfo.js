@@ -34,7 +34,7 @@ export default function PetInfo() {
   const navigation = useNavigation();
 
   const handleSubmit = async () => {
-    if (!name || !breed) {
+    if (!name || !breed || !weight || !age || !color || !price || !location || !gender) {
       //passing the error to a const so that 'alert' can display it immediately. Async nature of the language will prevent it otherwise
       const errorMessage = "Please fill in all the required fields.";
       setFormError(errorMessage);
@@ -43,7 +43,8 @@ export default function PetInfo() {
     }
 
     try {
-      let insertData = { name, breed, weight, age, color, price, location, gender };
+      const lowerCaseGender = gender.toLowerCase();
+      let insertData = { name, breed, weight, age, color, price, location, gender: lowerCaseGender };
 
       const { data, error } = await supabase
         .from("pet_profiles")
