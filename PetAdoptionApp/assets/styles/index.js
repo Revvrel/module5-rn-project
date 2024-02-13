@@ -28,6 +28,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         backgroundColor: 'white',
         fontSize: 14,
+        alignItems: 'stretch',
+        // alignSelf: 'center',
+        width:'100%',
     },
     View: {
         fontFamily: 'Poppins-Regular',
@@ -43,7 +46,7 @@ const styles = StyleSheet.create({
     h1: {
         fontFamily: 'Poppins-Bold',
         fontWeight: 'bold',
-        fontSize: 30,
+        fontSize: 28,
         paddingBottom: 20,
         textAlign: 'center',
         color: '#4B413E',

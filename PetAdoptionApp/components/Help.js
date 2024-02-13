@@ -11,10 +11,10 @@ export default function Help() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.h1}>Frequently Asked Questions</Text>
+      <Text style={[styles.h1, {alignSelf: 'center', width: '100%'}]}>Frequently Asked Questions</Text>
 
       {/* Q1 */}
-      <ListItem.Accordion
+      <ListItem.Accordion 
         content={
           <ListItem.Content>
             <ListItem.Title style={styles.listTitle}>
