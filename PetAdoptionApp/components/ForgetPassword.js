@@ -39,7 +39,7 @@ export default function ForgetPassword() {
       return;
     }
     setShowPasswordInputs(true);
-    Alert.alert("Success", "OTP successful " + data.token);
+    Alert.alert("Success", "OTP successful");
   }
 
   async function handleChangePassword() {

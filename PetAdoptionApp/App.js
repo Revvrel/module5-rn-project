@@ -11,6 +11,7 @@ import Help from "./components/Help";
 import { supabase } from "./lib/supabase";
 import PetProfile from "./screens/Pet/PetProfile";
 import PetInfo from "./screens/Pet/PetInfo";
+import FirstSetup from "./components/FirstSetup";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import WelcomeScreen from "./components/WelcomeScreen";
 import * as Font from 'expo-font';
@@ -90,6 +91,11 @@ export default function App() {
           <Tab.Screen name="Forget Password" component={ForgetPassword} />
           <Tab.Screen name="Help" component={Help} />
           <Tab.Screen
+            name="FirstSetup"
+            component={FirstSetup}
+            options={{ tabBarButton: () => null }}
+          />
+          <Tab.Screen
             name="PetInfo"
             component={PetInfo}
             options={{ tabBarButton: () => null }}
@@ -108,6 +114,7 @@ export default function App() {
             options={{ headerShown: false }}
           />
           <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="FirstSetup" component={FirstSetup} />
           <Stack.Screen name="PetInfo" component={PetInfo} />
           <Stack.Screen name="PetProfile" component={PetProfile} />
         </Stack.Navigator>
