@@ -37,9 +37,9 @@ export default function ForgetPassword() {
     if (error) {
       Alert.alert("Error", error.message);
       return;
-    }
+    } 
     setShowPasswordInputs(true);
-    Alert.alert("Success", "OTP successful");
+    Alert.alert("Success", "OTP verification successful. Please proceed to change your password at the Profile Page.");
   }
 
   async function handleChangePassword() {
