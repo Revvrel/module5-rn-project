@@ -90,7 +90,7 @@ export default function Register() {
         <Text style={{ fontSize: 16 }}>Have an account? </Text>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("Register");
+            navigation.navigate("Login");
           }}
         >
           <Text style={styles.link}>Log In</Text>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, TextInput, Button, Alert } from "react-native";
 import { supabase } from "../lib/supabase";
 import { useNavigation } from "@react-navigation/native";
+import { styles } from "../assets/styles/index.js";
 
 export default function ForgetPassword() {
   const [email, setEmail] = useState("");
@@ -31,13 +32,14 @@ export default function ForgetPassword() {
   }
 
   async function handleVerifyOTP() {
-    const {error} = await supabase.auth.verifyOtp({email:email, token:verificationCode, type:'email'});
+    const {data, error} = await supabase.auth.verifyOtp({email:email, token:verificationCode, type:'email'});
+    
     if (error) {
       Alert.alert("Error", error.message);
       return;
     }
     setShowPasswordInputs(true);
-    Alert.alert("Success", "OTP successful");
+    Alert.alert("Success", "OTP successful " + data.token);
   }
 
   async function handleChangePassword() {

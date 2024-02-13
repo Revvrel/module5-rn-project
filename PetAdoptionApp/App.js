@@ -13,6 +13,7 @@ import PetProfile from "./screens/Pet/PetProfile";
 import PetInfo from "./screens/Pet/PetInfo";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import WelcomeScreen from "./components/WelcomeScreen";
+import * as Font from 'expo-font';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -20,6 +21,18 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   const [session, setSession] = useState(null);
   const [showSplash, setShowSplash] = useState(true);
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        'Poppins-Bold': require("./assets/fonts/Poppins-Bold.ttf"),
+        'Poppins-Regular': require("./assets/fonts/Poppins-Regular.ttf"),
+      });
+      setFontLoaded(true); //
+    };
+    loadFonts();
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -40,7 +53,7 @@ export default function App() {
     });
   }, []);
 
-  if (showSplash) {
+  if (showSplash || !fontLoaded) {
     return <WelcomeScreen />;
   }
 
@@ -56,7 +69,7 @@ export default function App() {
                 iconName = focused ? "log-in" : "log-in-outline";
               } else if (route.name === "Register") {
                 iconName = focused ? "create" : "create-outline";
-              } else if (route.name === "ForgetPassword") {
+              } else if (route.name === "Forget Password") {
                 iconName = focused ? "lock-closed" : "lock-closed-outline";
               } else if (route.name === "Help") {
                 iconName = focused ? "help-circle" : "help-circle-outline";
@@ -74,7 +87,7 @@ export default function App() {
             options={{ tabBarButton: () => null }}
           />
           <Tab.Screen name="Register" component={Register} />
-          <Tab.Screen name="ForgetPassword" component={ForgetPassword} />
+          <Tab.Screen name="Forget Password" component={ForgetPassword} />
           <Tab.Screen name="Help" component={Help} />
           <Tab.Screen
             name="PetInfo"
@@ -93,7 +106,7 @@ export default function App() {
             name="Home"
             component={Home}
             options={{ headerShown: false }}
-          />         
+          />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="PetInfo" component={PetInfo} />
           <Stack.Screen name="PetProfile" component={PetProfile} />

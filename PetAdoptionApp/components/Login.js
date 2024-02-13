@@ -90,6 +90,19 @@ export default function Login() {
           <Text style={styles.link}>Sign Up Now!</Text>
         </TouchableOpacity>
       </View>
+      <View style={{ marginVertical: 10 }} />
+      <View style={{textAlign: 'center', flexDirection: 'row',justifyContent: 'center' }}>
+        <Text style={{ fontSize: 16 }}>Forget your Password? </Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Forget Password");
+          }}
+        >
+          <Text style={styles.link}>Forget Password</Text>
+        </TouchableOpacity>
+      </View>
+
+
       <View style={{paddingTop: 30}}>
         <TouchableOpacity
           onPress={() => {
