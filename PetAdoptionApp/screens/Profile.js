@@ -13,8 +13,9 @@ export default function Profile() {
 
   async function fetchSession() {
     const { data: { session } } = await supabase.auth.getSession();
+    const { data: { user } } = await supabase.auth.getUser();
     setSession(session);
-    console.log(session.user.email);
+    console.log("User ", user);
   }
 
   async function handleLogout() {
