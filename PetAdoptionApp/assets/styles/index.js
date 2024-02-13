@@ -30,7 +30,8 @@ const styles = StyleSheet.create({
         fontSize: 14,
         alignItems: 'stretch',
         // alignSelf: 'center',
-        width:'100%',
+        width: '100%',
+        height: '100%',
     },
     View: {
         fontFamily: 'Poppins-Regular',
