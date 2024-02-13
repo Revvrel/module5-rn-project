@@ -26,7 +26,6 @@ export default function Login() {
 
       if (!error) {
         setLoading(false);
-        alert("Login successful. Redirect to home page");
         navigation.navigate("Home");
       } else {
         setLoading(false);

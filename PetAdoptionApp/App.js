@@ -14,6 +14,7 @@ import PetInfo from "./screens/Pet/PetInfo";
 import FirstSetup from "./components/FirstSetup";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import WelcomeScreen from "./components/WelcomeScreen";
+import BlankPage from "./components/BlankPage";
 import * as Font from 'expo-font';
 
 const Stack = createStackNavigator();
@@ -82,14 +83,14 @@ export default function App() {
           })}
         >
           <Tab.Screen name="Login" component={Login} />
+          <Tab.Screen name="Register" component={Register} />
+          <Tab.Screen name="Forget Password" component={ForgetPassword} />
+          <Tab.Screen name="Help" component={Help} />
           <Tab.Screen
             name="Home"
             component={Home}
             options={{ tabBarButton: () => null }}
-          />
-          <Tab.Screen name="Register" component={Register} />
-          <Tab.Screen name="Forget Password" component={ForgetPassword} />
-          <Tab.Screen name="Help" component={Help} />
+          />          
           <Tab.Screen
             name="FirstSetup"
             component={FirstSetup}
@@ -108,6 +109,11 @@ export default function App() {
         </Tab.Navigator>
       ) : (
         <Stack.Navigator>
+          <Stack.Screen
+            name="BlankPage"
+            component={BlankPage}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="Home"
             component={Home}

@@ -49,7 +49,7 @@ export default function Register() {
   const confirmIOSDate = () => {
     setDateOfBirth(date.toDateString());
     toggleDatePicker();
-  }
+  };
 
   async function handleRegister() {
     setLoading(true);
@@ -65,13 +65,15 @@ export default function Register() {
       },
     });
 
+    supabase.auth.signOut();
+
     if (password !== confirmPassword) {
       setLoading(false);
       alert("Password not same as confirm password");
     } else {
       if (!error) {
         setLoading(false);
-        alert("Registration successful. Redirect to login page");
+        alert("Registration successful.");
         navigation.navigate("Login");
       }
       if (error) {
@@ -80,6 +82,7 @@ export default function Register() {
       }
     }
   }
+
   return (
     // <ScrollView style={styles.container}>
     <ScrollView>
@@ -116,7 +119,7 @@ export default function Register() {
           display="spinner"
           value={date}
           onChange={onChange}
-          maximumDate={new Date('2008-1-1')}
+          maximumDate={new Date("2008-1-1")}
         />
       )}
 
