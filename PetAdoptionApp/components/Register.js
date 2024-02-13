@@ -84,9 +84,8 @@ export default function Register() {
   }
 
   return (
-    // <ScrollView style={styles.container}>
-    <ScrollView>
-      <Text style={styles.h1}>Register to get started!</Text>
+    <View style={styles.container}>
+      <Text style={[styles.h1]}>Register to get{"\n"} started!</Text>
       <TextInput
         placeholder="Full Name"
         value={fullName}
@@ -180,28 +179,30 @@ export default function Register() {
           width: 200,
           justifyContent: "center",
           marginHorizontal: 90,
-          marginVertical: 10,
+          marginVertical: 20,
         }}
       />
 
-      <View style={{ marginVertical: 10 }} />
-      <View
-        style={{
-          textAlign: "center",
-          flexDirection: "row",
-          justifyContent: "center",
-        }}
-      >
-        <Text style={{ fontSize: 16 }}>Have an account? </Text>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Login");
+        <View style={{ marginTop: 5 }} />
+        <View
+          style={{
+            textAlign: "center",
+            flexDirection: "row",
+            justifyContent: "center",
           }}
         >
-          <Text style={styles.link}>Log In</Text>
-        </TouchableOpacity>
+          <Text >Have an account? </Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Login");
+            }}
+          >
+            <Text style={styles.link}>Log In</Text>
+          </TouchableOpacity>
+        </View>
+        
+        
       </View>
-      <View style={{ marginVertical: 10 }} />
-    </ScrollView>
+
   );
 }

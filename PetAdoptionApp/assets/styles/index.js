@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         textAlign: 'center',
         backgroundColor: 'white',
-        fontSize: 15
+        fontSize: 14,
     },
     View: {
         fontFamily: 'Poppins-Regular',
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     link: {
         textDecorationLine: 'underline',
         color: "#FFB197",
-        fontSize: 15
+        fontSize: 14,
     },
     h1: {
         fontFamily: 'Poppins-Bold',
