@@ -30,7 +30,7 @@ export default function App() {
         'Poppins-Bold': require("./assets/fonts/Poppins-Bold.ttf"),
         'Poppins-Regular': require("./assets/fonts/Poppins-Regular.ttf"),
       });
-      setFontLoaded(true); //
+      setFontLoaded(true);
     };
     loadFonts();
   }, []);
