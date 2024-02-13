@@ -38,7 +38,6 @@ export default function ForgetPassword() {
       Alert.alert("Error", error.message);
       return;
     } 
-    setShowPasswordInputs(true);
     Alert.alert("Success", "OTP verification successful. Please proceed to change your password at the Profile Page.");
   }
 
@@ -88,27 +87,6 @@ export default function ForgetPassword() {
             title="Verify OTP"
             onPress={handleVerifyOTP}
             disabled={!verificationCode}
-          />
-        </View>
-      )}
-      {showPasswordInputs && (
-        <View>
-          <TextInput
-            placeholder="Enter new password"
-            value={newPassword}
-            onChangeText={(text) => setNewPassword(text)}
-            secureTextEntry
-          />
-          <TextInput
-            placeholder="Confirm new password"
-            value={confirmPassword}
-            onChangeText={(text) => setConfirmPassword(text)}
-            secureTextEntry
-          />
-          <Button
-            title="Change Password"
-            onPress={handleChangePassword}
-            disabled={!newPassword || !confirmPassword}
           />
         </View>
       )}

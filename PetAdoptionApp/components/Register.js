@@ -138,7 +138,7 @@ export default function Register() {
         <Pressable onPress={toggleDatePicker}>
           <TextInput
             style={styles.input}
-            placeholder={"Sat Feb 13 2024"}
+            placeholder={"Sat Jan 01 2000"}
             value={dateOfBirth}
             onChangeText={setDateOfBirth}
             editable={false}
