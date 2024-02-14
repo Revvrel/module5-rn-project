@@ -31,7 +31,7 @@ export default function PetInfo() {
   const [formError, setFormError] = useState("");
 
   const navigation = useNavigation();
-  
+
   const handleSubmit = async () => {
     if (
       !name ||
@@ -131,7 +131,7 @@ export default function PetInfo() {
               mode="outlined"
               value={String(weight)}
               onChangeText={(text) => setWeight(text)}
-              keyboardType="numeric"         
+              keyboardType="numeric"
             />
             <TextInput
               style={styles.input}
@@ -188,14 +188,27 @@ export default function PetInfo() {
             onPress={handleSubmit}
           />
           <View style={{ marginVertical: 10 }} />
-          <View>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate("PetProfile");
-              }}
-            >
-              <Text style={{ color: "blue" }}>Go to pet profile page</Text>
-            </TouchableOpacity>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <View style={{marginRight: 80}}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("PetProfile");
+                }}
+              >
+                <Text style={{ color: "blue" }}>Go to pet profile page</Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("PetInfoUploader");
+                }}
+              >
+                <Text style={{ color: "blue" }}>Upload pet's photo</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </ScrollView>
       </NavigationContainer>
@@ -220,5 +233,6 @@ const styles = StyleSheet.create({
     width: 300,
     fontSize: 15,
     marginBottom: 5,
+    backgroundColor: "#E5E5E5",
   },
 });
