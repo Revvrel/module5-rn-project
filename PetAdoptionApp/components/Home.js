@@ -26,11 +26,11 @@ function HomeTabNavigator() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === "SwipeHome") {
+          if (route.name === "Home") {
             iconName = focused ? "home" : "home-outline";
-          } else if (route.name === "Matches") {
+          } else if (route.name === "Match") {
             iconName = focused ? "heart" : "heart-outline";
-          } else if (route.name === "Messages") {
+          } else if (route.name === "Chat") {
             iconName = focused
               ? "chatbox-ellipses"
               : "chatbox-ellipses-outline";
@@ -38,21 +38,19 @@ function HomeTabNavigator() {
             iconName = focused ? "person" : "person-outline";
           } else if (route.name === "Help") {
             iconName = focused ? "help-circle" : "help-circle-outline";
-          } else if (route.name === "CameraTest") {
-            iconName = focused ? "camera" : "camera-outline";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: "red",
         tabBarInactiveTintColor: "blue",
+        tabBarShowLabel: false,
       })}
     >
-      <Tab.Screen name="SwipeHome" component={SwipeHome} />
-      <Tab.Screen name="Matches" component={Matches} />
-      <Tab.Screen name="Messages" component={Messages} />
+      <Tab.Screen name="Home" component={SwipeHome} />
+      <Tab.Screen name="Match" component={Matches} />
+      <Tab.Screen name="Chat" component={Messages} />
       <Tab.Screen name="Profile" component={Profile} />
       <Tab.Screen name="Help" component={Help} />
-      <Tab.Screen name="CameraTest" component={CameraTest} />
     </Tab.Navigator>
   );
 }

@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, TextInput, ScrollView } from "react-native";
 import { Button } from "@rneui/themed";
 import { supabase } from "../lib/supabase";
 import { useNavigation } from "@react-navigation/native";
 import { styles } from "../assets/styles/index.js";
-import ProfilePic from "./ProfilePic.js";
+import { Camera, CameraType } from "expo-camera";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Image,
+  Pressable,
+  ScrollView,
+  TextInput,
+} from "react-native";
+import CameraTest from "../components/CameraTest.js";
 
 export default function Profile() {
   const [loading, setLoading] = useState(true);
@@ -20,6 +31,11 @@ export default function Profile() {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [changePasswordButtonVisible, setChangePasswordButtonVisible] =
     useState(true);
+  const [type, setType] = useState(CameraType.back);
+  const [permission, requestPermission] = Camera.useCameraPermissions();
+  const [camera, setCamera] = useState(null);
+  const [showCamera, setShowCamera] = useState(false);
+  const [image, setImage] = useState(null);
 
   const navigation = useNavigation();
 
@@ -121,20 +137,106 @@ export default function Profile() {
     setChangePasswordButtonVisible(false);
   };
 
+  // ALL THE FUNCTIONS FOR CAMERA AND STORING OF IMAGE TO SUPABASE
+
+  if (!permission) {
+    return <View />;
+  }
+
+  if (!permission.granted) {
+    return (
+      <View style={styles.container}>
+        <Text style={{ textAlign: "center" }}>
+          We need your permission to show the camera
+        </Text>
+        <Button onPress={requestPermission} title="grant permission" />
+      </View>
+    );
+  }
+
+  function toggleCameraType() {
+    setType((current) =>
+      current === CameraType.back ? CameraType.front : CameraType.back
+    );
+  }
+
+  const captureImage = async () => {
+    if (permission.granted) {
+      const photo = await camera.takePictureAsync({ base64: true });
+      setShowCamera(false);
+      setImage(photo);
+      uploadImage(photo.uri);
+    }
+  };
+
+  const uploadImage = async (uri) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const arrayBuffer = await new Response(blob).arrayBuffer();
+    const fileName = `public/${Date.now()}.jpg`;
+    const { error } = await supabase.storage
+      .from("testPhoto")
+      .upload(fileName, arrayBuffer, {
+        contentType: "image/jpeg",
+        upsert: false,
+      });
+    if (error) {
+      console.error("Error uploading image: ", error);
+    }
+    console.log("ArrayBuffer: " + arrayBuffer.byteLength);
+  };
+
   return (
     <ScrollView>
       <View style={{ marginVertical: 10 }} />
       <Text style={styles.h1}>{username} Profile</Text>
-      <View>
-        <ProfilePic
-          size={200}
-          url={avatarUrl}
-          onUpload={(url) => {
-            setAvatarUrl(url);
-            // updateProfile({ username, website, avatar_url: url });
+      {showCamera ? (
+        <Camera
+          style={stylesCamera.camera}
+          type={type}
+          ref={(ref) => {
+            setCamera(ref);
           }}
-        />
-      </View>
+        >
+          <View style={stylesCamera.buttonContainer}>
+            <TouchableOpacity style={stylesCamera.button} onPress={toggleCameraType}>
+              <MaterialCommunityIcons
+                name="camera-flip"
+                size={36}
+                color="black"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity style={stylesCamera.button} onPress={captureImage}>
+              <MaterialCommunityIcons name="camera" size={36} color="black" />
+            </TouchableOpacity>
+          </View>
+        </Camera>
+      ) : (
+        <View style={{ flex: 1 }}>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <View style={{ width: "100%", alignItems: "center" }}>
+              {true && (
+                <Pressable onPress={() => setShowCamera(true)}>
+                  <Image
+                    source={image}
+                    style={{
+                      width: 150,
+                      height: 150,
+                      backgroundColor: "black",
+                    }}
+                  />
+                </Pressable>
+              )}
+            </View>
+          </View>
+        </View>
+      )}
       <View style={{ marginVertical: 10 }} />
       <Text>Full Name</Text>
       <TextInput
@@ -234,3 +336,33 @@ export default function Profile() {
     </ScrollView>
   );
 }
+
+const stylesCamera = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  camera: {
+    height: "80%",
+    width: "100%",
+  },
+  buttonContainer: {
+    backgroundColor: "transparent",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  button: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignSelf: "flex-end",
+    alignItems: "center",
+  },
+  text: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "white",
+  },
+});
