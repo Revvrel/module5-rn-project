@@ -5,15 +5,17 @@ import {
   Text,
   View,
   ScrollView,
+  TextInput
 } from "react-native";
 import * as React from "react";
 import { useState, useRef } from "react";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
-import { PaperProvider, TextInput } from "react-native-paper";
+import { PaperProvider} from "react-native-paper";
 import { Button } from "@rneui/themed";
 import supabase from "../../config/supabaseClient/";
+import { styles } from "../../assets/styles/index.js";
 
 // const CustomLabel = ({ children, color }) => (
 //   <Text style={{ color }}>{children}</Text>
@@ -99,43 +101,38 @@ export default function PetInfo() {
     >
       <NavigationContainer independent={true}>
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
-          <View style={styles.inputContainer}>
+          <View style={styles.container}>
             <Text
-              style={{
-                paddingVertical: 30,
-                fontSize: 18,
-                textAlign: "center",
-                fontWeight: "bold",
-              }}
+              style={styles.h1}
             >
-              Information Of Your Pet
+              Pet Profile
             </Text>
             <TextInput
               style={styles.input}
               //label={<CustomLabel color="#E4BDFF">Name...</CustomLabel>}
-              label="Name"
-              mode="outlined"
+               placeholder="Name"
+              // mode="outlined"
               value={name}
               onChangeText={(name) => setName(name)}
             />
             <TextInput
               style={styles.input}
-              label="Breed"
+               placeholder="Breed"
               mode="outlined"
               value={breed}
               onChangeText={(breed) => setBreed(breed)}
             />
             <TextInput
               style={styles.input}
-              label="Weight(kg)"
+               placeholder="Weight(kg)"
               mode="outlined"
               value={String(weight)}
               onChangeText={(text) => setWeight(text)}
-              keyboardType="numeric"         
+              keyboardType="numeric"
             />
             <TextInput
               style={styles.input}
-              label="Age"
+               placeholder="Age"
               mode="outlined"
               value={String(age)}
               onChangeText={(age) => setAge(age)}
@@ -143,14 +140,14 @@ export default function PetInfo() {
             />
             <TextInput
               style={styles.input}
-              label="Color"
+               placeholder="Color"
               mode="outlined"
               value={color}
               onChangeText={(color) => setColor(color)}
             />
             <TextInput
               style={styles.input}
-              label="Price"
+               placeholder="Price"
               mode="outlined"
               value={String(price)}
               onChangeText={(price) => setPrice(price)}
@@ -158,14 +155,14 @@ export default function PetInfo() {
             />
             <TextInput
               style={styles.input}
-              label="Location"
+               placeholder="Location"
               mode="outlined"
               value={location}
               onChangeText={(location) => setLocation(location)}
             />
             <TextInput
               style={styles.input}
-              label="Gender"
+               placeholder="Gender"
               mode="outlined"
               value={gender}
               onChangeText={(gender) => setGender(gender)}
@@ -173,17 +170,17 @@ export default function PetInfo() {
           </View>
           <Button
             buttonStyle={{
-              backgroundColor: "#FFB197",
+              backgroundColor: '#FFB197',
               borderRadius: 50,
-              padding: 10,
-              height: 50,
-            }}
+              padding: 15,
+              height: 55,
+              }}
             containerStyle={{
               width: 150,
-              justifyContent: "center",
+              justifyContent: 'center',
               marginHorizontal: 120,
-              marginVertical: 5,
-            }}
+              marginVertical: 10,
+              }}
             title="Submit"
             onPress={handleSubmit}
           />
@@ -202,23 +199,3 @@ export default function PetInfo() {
     </PaperProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  scrollViewContent: {
-    flexGrow: 1,
-    //backgroundColor: "#F4E4FF",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  inputContainer: {
-    width: 300,
-    marginBottom: 10,
-    borderRadius: 12, // Curving the edges
-    //overflow: "hidden", // Ensure the border-radius is applied correctly
-  },
-  input: {
-    width: 300,
-    fontSize: 15,
-    marginBottom: 5,
-  },
-});

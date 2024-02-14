@@ -1,17 +1,19 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import { Matches, Messages, Profile, SwipeHome } from "../screens";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Help from "./Help";
-
+import Settings from "./Settings";
+import { useNavigation } from "@react-navigation/native";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 async function fetchSession() {
-  const { data: { session } } = await supabase.auth.getSession();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
   setSession(session);
   console.log(session.user.email);
 }
@@ -20,6 +22,7 @@ function HomeTabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+        headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
@@ -28,7 +31,9 @@ function HomeTabNavigator() {
           } else if (route.name === "Matches") {
             iconName = focused ? "heart" : "heart-outline";
           } else if (route.name === "Messages") {
-            iconName = focused ? "chatbox-ellipses" : "chatbox-ellipses-outline";
+            iconName = focused
+              ? "chatbox-ellipses"
+              : "chatbox-ellipses-outline";
           } else if (route.name === "Profile") {
             iconName = focused ? "person" : "person-outline";
           } else if (route.name === "Help") {
@@ -50,7 +55,31 @@ function HomeTabNavigator() {
 }
 
 export default function Home() {
+
+  const navigation = useNavigation();
+
   return (
-    <HomeTabNavigator />
+    <Stack.Navigator>
+      <Stack.Screen
+        name="HomeTabNavigator"
+        component={HomeTabNavigator}
+        options={{
+          title: "Furever Home",
+          headerTitleAlign: "center",
+          headerRight: () => (
+            <Ionicons
+              name="settings-outline"
+              size={25}
+              color="blue"
+              onPress={() => {
+                navigation.navigate("Settings");
+              }}
+              style={{ marginRight: 10 }}
+            />
+          ),
+          headerLeft: null,
+        }}
+      />
+    </Stack.Navigator>
   );
 }
