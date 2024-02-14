@@ -4,7 +4,7 @@ import React from "react";
 import { Matches, Messages, Profile, SwipeHome } from "../screens";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Help from "./Help";
-import Settings from "./Settings";
+import CameraTest from "./CameraTest";
 import { useNavigation } from "@react-navigation/native";
 
 const Stack = createStackNavigator();
@@ -26,11 +26,11 @@ function HomeTabNavigator() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === "SwipeHome") {
+          if (route.name === "Home") {
             iconName = focused ? "home" : "home-outline";
-          } else if (route.name === "Matches") {
+          } else if (route.name === "Match") {
             iconName = focused ? "heart" : "heart-outline";
-          } else if (route.name === "Messages") {
+          } else if (route.name === "Chat") {
             iconName = focused
               ? "chatbox-ellipses"
               : "chatbox-ellipses-outline";
@@ -43,11 +43,12 @@ function HomeTabNavigator() {
         },
         tabBarActiveTintColor: "red",
         tabBarInactiveTintColor: "blue",
+        tabBarShowLabel: false,
       })}
     >
-      <Tab.Screen name="SwipeHome" component={SwipeHome} />
-      <Tab.Screen name="Matches" component={Matches} />
-      <Tab.Screen name="Messages" component={Messages} />
+      <Tab.Screen name="Home" component={SwipeHome} />
+      <Tab.Screen name="Match" component={Matches} />
+      <Tab.Screen name="Chat" component={Messages} />
       <Tab.Screen name="Profile" component={Profile} />
       <Tab.Screen name="Help" component={Help} />
     </Tab.Navigator>
