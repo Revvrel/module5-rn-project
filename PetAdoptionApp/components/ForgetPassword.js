@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { View, TextInput, Button, Alert } from "react-native";
+import { View, TextInput, Text, Alert } from "react-native";
 import { supabase } from "../lib/supabase";
 import { useNavigation } from "@react-navigation/native";
+import { styles } from "../assets/styles/index.js";
+import { Button } from "@rneui/themed";
+
 
 export default function ForgetPassword() {
   const [email, setEmail] = useState("");
@@ -31,13 +34,13 @@ export default function ForgetPassword() {
   }
 
   async function handleVerifyOTP() {
-    const {error} = await supabase.auth.verifyOtp({email:email, token:verificationCode, type:'email'});
+    const {data, error} = await supabase.auth.verifyOtp({email:email, token:verificationCode, type:'email'});
+    
     if (error) {
       Alert.alert("Error", error.message);
       return;
-    }
-    setShowPasswordInputs(true);
-    Alert.alert("Success", "OTP successful");
+    } 
+    Alert.alert("Success", "OTP verification successful. Please proceed to change your password at the Profile Page.");
   }
 
   async function handleChangePassword() {
@@ -59,7 +62,8 @@ export default function ForgetPassword() {
   }
 
   return (
-    <View>
+    <View style={styles.container}>
+      <Text style={styles.h1}>Recover your {"\n"} Password</Text>
       <TextInput
         placeholder="Enter your email"
         value={email}
@@ -68,11 +72,28 @@ export default function ForgetPassword() {
         autoCorrect={false}
         keyboardType="email-address"
         onChangeText={(text) => setEmail(text)}
+         style={styles.input}
       />
+
+      <View style={{ marginVertical: 10 }} />
+
+
       <Button
         title={loading ? "Loading" : "Send email"}
         onPress={handleForgetPassword}
         disabled={loading}
+        buttonStyle={{
+              backgroundColor: '#FFB197',
+              borderRadius: 50,
+              padding: 15,
+              height: 55,
+              }}
+            containerStyle={{
+              width: 150,
+              justifyContent: 'center',
+              marginHorizontal: 120,
+              marginVertical: 10,
+              }}
       />
       {showVerificationInput && (
         <View>
@@ -82,31 +103,24 @@ export default function ForgetPassword() {
             onChangeText={(text) => setVerificationCode(text)}
             keyboardType="numeric"
           />
+      
+<View style={{ marginVertical: 10 }} />
           <Button
             title="Verify OTP"
             onPress={handleVerifyOTP}
             disabled={!verificationCode}
-          />
-        </View>
-      )}
-      {showPasswordInputs && (
-        <View>
-          <TextInput
-            placeholder="Enter new password"
-            value={newPassword}
-            onChangeText={(text) => setNewPassword(text)}
-            secureTextEntry
-          />
-          <TextInput
-            placeholder="Confirm new password"
-            value={confirmPassword}
-            onChangeText={(text) => setConfirmPassword(text)}
-            secureTextEntry
-          />
-          <Button
-            title="Change Password"
-            onPress={handleChangePassword}
-            disabled={!newPassword || !confirmPassword}
+            buttonStyle={{
+              backgroundColor: '#FFB197',
+              borderRadius: 50,
+              padding: 15,
+              height: 55,
+              }}
+            containerStyle={{
+              width: 150,
+              justifyContent: 'center',
+              marginHorizontal: 120,
+              marginVertical: 10,
+              }}
           />
         </View>
       )}

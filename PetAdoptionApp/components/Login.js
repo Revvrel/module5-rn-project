@@ -26,7 +26,6 @@ export default function Login() {
 
       if (!error) {
         setLoading(false);
-        alert("Login successful. Redirect to home page");
         navigation.navigate("Home");
       } else {
         setLoading(false);
@@ -62,6 +61,16 @@ export default function Login() {
         onChangeText={(text) => setPassword(text)}
         style={styles.input}
       />
+      <View style={{textAlign: 'center', flexDirection: 'row',justifyContent: 'flex-end' }}>
+   
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Forget Password");
+          }}
+        >
+          <Text style={{color: '#B6A6A1', fontSize: 12, paddingRight: 20, marginBottom: 15}}>Forgot Password?</Text>
+        </TouchableOpacity>
+      </View>
       <Button
         title={loading ? "Loading" : "Login"}
         onPress={handleLogin}
@@ -81,7 +90,7 @@ export default function Login() {
       />
       <View style={{ marginVertical: 10 }} />
       <View style={{textAlign: 'center', flexDirection: 'row',justifyContent: 'center' }}>
-        <Text style={{ fontSize: 16 }}>Don't have an account? </Text>
+        <Text>Don't have an account? </Text>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("Register");
@@ -90,13 +99,17 @@ export default function Login() {
           <Text style={styles.link}>Sign Up Now!</Text>
         </TouchableOpacity>
       </View>
+      <View style={{ marginVertical: 10 }} />
+      
+
+
       <View style={{paddingTop: 30}}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("PetInfo");
           }}
         >
-          <Text style={{ color: "blue" }}>Go to pet info page</Text>
+          <Text style={[styles.link, {textAlign: 'center'}]}>Go to pet info page</Text>
         </TouchableOpacity>
       </View>
     </View>
