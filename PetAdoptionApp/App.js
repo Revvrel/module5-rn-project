@@ -15,6 +15,7 @@ import Settings from "./components/Settings";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import WelcomeScreen from "./components/WelcomeScreen";
 import BlankPage from "./components/BlankPage";
+import CameraTest from "./components/CameraTest";
 import * as Font from 'expo-font';
 
 const Stack = createStackNavigator();
@@ -116,6 +117,7 @@ export default function App() {
           />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Settings" component={Settings} />
+          <Stack.Screen name="CameraTest" component={CameraTest} />
           <Stack.Screen name="PetInfo" component={PetInfo} />
           <Stack.Screen name="PetProfile" component={PetProfile} />
         </Stack.Navigator>

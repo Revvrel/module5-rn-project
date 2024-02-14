@@ -4,7 +4,7 @@ import React from "react";
 import { Matches, Messages, Profile, SwipeHome } from "../screens";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Help from "./Help";
-import Settings from "./Settings";
+import CameraTest from "./CameraTest";
 import { useNavigation } from "@react-navigation/native";
 
 const Stack = createStackNavigator();
@@ -38,6 +38,8 @@ function HomeTabNavigator() {
             iconName = focused ? "person" : "person-outline";
           } else if (route.name === "Help") {
             iconName = focused ? "help-circle" : "help-circle-outline";
+          } else if (route.name === "CameraTest") {
+            iconName = focused ? "camera" : "camera-outline";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -50,6 +52,7 @@ function HomeTabNavigator() {
       <Tab.Screen name="Messages" component={Messages} />
       <Tab.Screen name="Profile" component={Profile} />
       <Tab.Screen name="Help" component={Help} />
+      <Tab.Screen name="CameraTest" component={CameraTest} />
     </Tab.Navigator>
   );
 }
