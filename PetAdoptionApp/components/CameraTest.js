@@ -1,37 +1,38 @@
-import { useState, useEffect, useRef } from "react";
-import { supabase } from "../lib/supabase";
-import * as ImagePicker from "expo-image-picker";
 import { Camera, CameraType } from "expo-camera";
+import { useState } from "react";
 import {
   Button,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  Alert,
   Image,
+  Pressable,
 } from "react-native";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { supabase } from "../lib/supabase";
+import iconPic from "../assets/images/profileIcon.jpg"
 
 export default function CameraTest() {
-  const [type, setType] = useState(Camera.Constants.Type.back);
-  const [hasPermission, setHasPermission] = useState(null);
+  const [type, setType] = useState(CameraType.back);
+  const [permission, requestPermission] = Camera.useCameraPermissions();
+  const [camera, setCamera] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
   const [image, setImage] = useState(null);
 
-  const cameraRef = useRef(null);
-
-  useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === "granted");
-    })();
-  }, []);
-
-  if (hasPermission === null) {
+  if (!permission) {
     return <View />;
   }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+
+  if (!permission.granted) {
+    return (
+      <View style={styles.container}>
+        <Text style={{ textAlign: "center" }}>
+          We need your permission to show the camera
+        </Text>
+        <Button onPress={requestPermission} title="grant permission" />
+      </View>
+    );
   }
 
   function toggleCameraType() {
@@ -40,52 +41,56 @@ export default function CameraTest() {
     );
   }
 
-  const takePhoto = async () => {
-    if (cameraRef) {
-      console.log("in take picture");
-      try {
-        let photo = await cameraRef.current.takePictureAsync({
-          allowsEditing: true,
-          aspect: [4, 3],
-          quality: 1,
-        });
-        return photo;
-      } catch (e) {
-        console.log(e);
-      }
+  const captureImage = async () => {
+    if (permission.granted) {
+      const photo = await camera.takePictureAsync({ base64: true });
+      setShowCamera(false);
+      setImage(photo);
+      uploadImage(photo.uri);
     }
+  };
+
+  const uploadImage = async (uri) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const arrayBuffer = await new Response(blob).arrayBuffer();
+    const fileName = `public/${Date.now()}.jpg`;
+    const { error } = await supabase.storage
+      .from("testPhoto")
+      .upload(fileName, arrayBuffer, {
+        contentType: "image/jpeg",
+        upsert: false,
+      });
+    if (error) {
+      console.error("Error uploading image: ", error);
+    }
+    console.log("ArrayBuffer: " + arrayBuffer.byteLength);
   };
 
   return (
     <View style={styles.container}>
       {showCamera ? (
-        <Camera style={styles.camera} type={type} ref={cameraRef}>
+        <Camera
+          style={styles.camera}
+          type={type}
+          ref={(ref) => {
+            setCamera(ref);
+          }}
+        >
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
-              <Text style={styles.flipText}>Flip Camera </Text>
+              <MaterialCommunityIcons
+                name="camera-flip"
+                size={36}
+                color="black"
+              />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={async () => {
-                const r = await takePhoto();
-                if (!r.cancelled) {
-                  setImage(r.uri);
-                }
-                setShowCamera(false);
-              }}
-            >
-              <Text style={styles.flipText}>Photo </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => setShowCamera(false)}
-            >
-              <Text style={styles.flipText}>Cancel</Text>
+            <TouchableOpacity style={styles.button} onPress={captureImage}>
+              <MaterialCommunityIcons name="camera" size={36} color="black" />
             </TouchableOpacity>
           </View>
         </Camera>
       ) : (
-        // WHEN NO CAMERA
         <View style={{ flex: 1 }}>
           <View
             style={{
@@ -96,18 +101,18 @@ export default function CameraTest() {
           >
             <View style={{ width: "100%", alignItems: "center" }}>
               {true && (
-                <Image
-                  source={{ uri: image }}
-                  style={{ width: 200, height: 200, backgroundColor: "black" }}
-                />
+                <Pressable onPress={() => setShowCamera(true)}>
+                  <Image
+                    source={image}
+                    style={{
+                      width: 150,
+                      height: 150,
+                      backgroundColor: "black",
+                    }}
+                  />
+                </Pressable>
               )}
             </View>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => setShowCamera(true)}
-            >
-              <Text>TAKE PICTURE </Text>
-            </TouchableOpacity>
           </View>
         </View>
       )}
@@ -118,24 +123,30 @@ export default function CameraTest() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "center",
   },
   camera: {
     flex: 1,
   },
   buttonContainer: {
-    position: "absolute",
-    bottom: 20,
-    left: 20,
-    right: 20,
-    alignItems: "center",
+    flex: 1,
+    flexDirection: "row",
+    backgroundColor: "transparent",
+    justifyContent: "center",
+    margin: 32,
   },
   button: {
-    backgroundColor: "white",
-    padding: 10,
-    borderRadius: 5,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignSelf: "flex-end",
+    alignItems: "center",
   },
-  flipText: {
-    color: "black",
-    fontSize: 15,
+  text: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "white",
   },
 });
