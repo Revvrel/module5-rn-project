@@ -43,7 +43,7 @@ function HomeTabNavigator() {
         },
         tabBarActiveTintColor: "red",
         tabBarInactiveTintColor: "blue",
-        tabBarShowLabel: false,
+        tabBarShowLabel: true,
       })}
     >
       <Tab.Screen name="Home" component={SwipeHome} />

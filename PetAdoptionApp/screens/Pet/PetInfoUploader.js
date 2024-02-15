@@ -1,99 +1,101 @@
-import React, { useState } from "react";
-import { View, Button, Image } from "react-native";
-import * as DocumentPicker from "expo-document-picker";
-import * as ImagePicker from "expo-image-picker";
+import { Camera } from "expo-camera";
+import { useState } from "react";
+import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { supabase } from "../../lib/supabase";
 
-const PetInfoUploader = () => {
-  const [file, setFile] = useState(null);
+export default function App() {
+  const [permission, requestPermission] = Camera.useCameraPermissions();
+  const [camera, setCamera] = useState(null);
 
-  const handleUpload = async () => {
-    try {
-      const { uri, name } = file;
-      const fileData = await readFile(uri); // You need to implement readFile function
+  if (!permission) {
+    // Camera permissions are still loading
+    return <View />;
+  }
 
-      // Upload the file to Supabase Storage
-      const { data, error } = await supabase.storage
-        .from("pet_info") // Replace with your bucket name
-        .upload(name, fileData);
+  if (!permission.granted) {
+    // Camera permissions are not granted yet
+    return (
+      <View style={styles.container}>
+        <Text style={{ textAlign: "center" }}>
+          We need your permission to show the camera
+        </Text>
+        <Button onPress={requestPermission} title="grant permission" />
+      </View>
+    );
+  }
 
-      if (!error) setFile(data);
-
-      if (!file) {
-        alert("Please select a file");
-        return;
-      }
-
-      if (error) {
-        console.error("Error uploading file:", error.message);
-        return;
-      }
-
-      console.log("File uploaded successfully:", data);
-
-      // Reset file state after successful upload
-      setFile(null);
-      alert("File uploaded successfully");
-    } catch (error) {
-      console.error("Error:", error.message);
+  const captureImage = async () => {
+    if (permission.granted) {
+      const photo = await camera.takePictureAsync({ base64: true });
+      //console.log("photo", photo);
+      uploadImage(photo.uri);
     }
   };
 
-  //   const selectFile = async () => {
-  //     try {
-  //       const { type } = await DocumentPicker.getDocumentAsync({
-  //         type: "*/*", // Allow all file types. You can specify specific types if needed.
-  //       });
+  const uploadImage = async (uri) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const arrayBuffer = await new Response(blob).arrayBuffer();
+    console.log("arrayBuffer", arrayBuffer.byteLength); //Tis code check if the image is captured
+    const fileName = `public/${Date.now()}.jpg`;
 
-  //       if (type === "success") {
-  //         setFile(file);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error selecting file:", error.message);
-  //     }
-  //   };
-
-  const selectFile = async () => {
-    try {
-      const { type, uri } = await DocumentPicker.getDocumentAsync({
-        type: "*/*", // Allow all file types. You can specify specific types if needed.
+    const { error } = await supabase.storage
+      .from("pet_info")
+      .upload(fileName, arrayBuffer, {
+        contentType: "image/jpeg",
+        upsert: false,
       });
-
-      if (type === "success" && uri) {
-        setFile({ uri }); // Set the file state here
-      }
-    } catch (error) {
-      console.error("Error selecting file:", error.message);
-    }
-  };
-
-  const selectImage = async () => {
-    try {
-      const { uri, type } = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-
-      if (uri) {
-        setFile({ uri, name: `image_${Date.now()}.jpg`, type });
-      }
-    } catch (error) {
-      console.error("Error selecting image:", error.message);
+    if (error) {
+      console.error("Error uploading image: ", error);
     }
   };
 
   return (
-    <View>
-      <Button title="Select Image" onPress={selectImage} />
-      <Button title="Select PDF" onPress={selectFile} />
-      {file && file.uri && (
-        <Image source={{ uri: file.uri }} style={{ width: 200, height: 200 }} />
-      )}
-      <Button title="Upload File" onPress={handleUpload} />
+    <View style={styles.container}>
+      <Camera
+        style={styles.camera}
+        ref={(ref) => {
+          setCamera(ref);
+        }}
+      >
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={captureImage}>
+            <MaterialCommunityIcons name="camera" size={36} color="black" />
+          </TouchableOpacity>
+        </View>
+      </Camera>
     </View>
   );
-};
+}
 
-export default PetInfoUploader;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  camera: {
+    flex: 1,
+  },
+  buttonContainer: {
+    flex: 1,
+    flexDirection: "row",
+    backgroundColor: "transparent",
+    justifyContent: "center",
+    margin: 32,
+  },
+  button: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignSelf: "flex-end",
+    alignItems: "center",
+  },
+  text: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "white",
+  },
+});
