@@ -41,9 +41,9 @@ function HomeTabNavigator() {
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "red",
-        tabBarInactiveTintColor: "blue",
-        tabBarShowLabel: true,
+        tabBarActiveTintColor: "#4B413E",
+        tabBarInactiveTintColor: "#B6A6A1",
+        tabBarShowLabel: false,
       })}
     >
       <Tab.Screen name="Home" component={SwipeHome} />
