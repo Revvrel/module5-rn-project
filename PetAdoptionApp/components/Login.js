@@ -109,7 +109,7 @@ export default function Login() {
             navigation.navigate("PetInfo");
           }}
         >
-          <Text style={[styles.link, {textAlign: 'center'}]}>Go to pet info page</Text>
+          <Text style={[styles.link, {textAlign: 'center'}]}>Create a pet profile</Text>
         </TouchableOpacity>
       </View>
     </View>
