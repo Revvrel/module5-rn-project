@@ -14,9 +14,9 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { supabase } from "../../lib/supabase";
-import PetProfileCard from "../../components/Pet/PetProfileCard";
 import COLORS from "../../components/Pet/const/colors";
 import { ScrollView } from "react-native-gesture-handler";
+import { Button } from "@rneui/themed";
 
 const Stack = createStackNavigator();
 
@@ -48,7 +48,7 @@ const PetProfile = ({ navigation }) => {
     <NavigationContainer independent={true}>
       <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
         <StatusBar backgroundColor={COLORS.background} />
-        <View style={{ height: 400, backgroundColor: COLORS.background }}>
+        <View style={{ height: 380, backgroundColor: COLORS.background }}>
           {fetchError && <Text>{fetchError}</Text>}
 
           <ImageBackground
@@ -159,7 +159,10 @@ const PetProfile = ({ navigation }) => {
                         color: COLORS.dark,
                       }}
                     >
-                      ${profile.price}
+                      ${profile.price}                      
+                    </Text>
+                    <Text style={{ fontSize: 13, color: COLORS.dark, paddingLeft: 110 }}>
+                    Weight: {profile.weight}Kg
                     </Text>
                     <Text style={{ fontSize: 13, color: COLORS.dark }}>
                       Age: {profile.age}
@@ -178,11 +181,35 @@ const PetProfile = ({ navigation }) => {
                 justifyContent: "center",
               }}
             >
-              <Icon name="map-marker" color={COLORS.primary} size={20} />
-              
-              <Text style={{ fontSize: 14, color: COLORS.grey, marginLeft: 5 }}>
-                10880 Malibu Point, 90265
-              </Text>
+              {petProfiles && (
+                <View>
+                  {petProfiles.map((profile) => (
+                    <View
+                      key={profile.id}
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        marginTop: 5,
+                      }}
+                    >
+                      <Icon
+                        name="map-marker"
+                        color={COLORS.primary}
+                        size={20}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: COLORS.grey,
+                          marginLeft: 5,
+                        }}
+                      >
+                        {profile.location}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              )}
             </View>
           </View>
         </View>
@@ -191,14 +218,15 @@ const PetProfile = ({ navigation }) => {
         <View
           style={{ marginTop: 80, justifyContent: "space-between", flex: 1 }}
         >
-          <View>
+          <View>           
             {/* Render user image , name and date */}
-            <View style={{ flexDirection: "row", paddingHorizontal: 20 }}>
+            <View style={{ flexDirection: "row", paddingHorizontal: 20, paddingVertical: 20 }}>
               <Image
                 source={require("../../assets/images/potts.jpg")}
                 style={{ height: 40, width: 40, borderRadius: 20 }}
               />
-              <View style={{ flex: 1, paddingLeft: 10 }}>
+              
+              <View style={{ flex: 1, paddingLeft: 10 }}>                
                 <Text
                   style={{
                     color: COLORS.dark,
@@ -225,8 +253,8 @@ const PetProfile = ({ navigation }) => {
             </View>
             <Text style={styles.comment}>
               I am migrating to another country and I can't take my cat along
-              sadly. Looking for kind people to adopt my cat.
-            </Text>
+              sadly. Looking for kind people to adopt my cat.            
+            </Text>            
           </View>
 
           {/* Render footer */}
@@ -235,11 +263,27 @@ const PetProfile = ({ navigation }) => {
               <Icon name="heart-outline" size={22} color={COLORS.white} />
             </View>
             <View style={styles.btn}>
-              <Text style={{ color: COLORS.white, fontWeight: "bold" }}>
+            <Text style={{ color: COLORS.white, fontWeight: "bold" }}>
                 ADOPTION
-              </Text>
+            </Text>
+            {/* <Button
+            buttonStyle={{
+              backgroundColor: '#FFB197',
+              borderRadius: 50,
+              padding: 15,
+              height: 55,
+              }}
+            containerStyle={{
+              width: 150,
+              justifyContent: 'center',
+              marginHorizontal: 120,
+              marginVertical: 10,
+              }}
+            title="Adopt it"
+            onPress={alert("aa")}
+          /> */}
             </View>
-          </View>
+          </View>         
         </View>
       </SafeAreaView>
     </NavigationContainer>
@@ -250,18 +294,17 @@ export default PetProfile;
 
 const styles = StyleSheet.create({
   detailsContainer: {
-    height: 120,
+    height: 140,
     backgroundColor: COLORS.white,
-    marginHorizontal: 20,
-    flex: 1,
-    bottom: -60,
+    marginHorizontal: 20,    
+    bottom: -50,
     borderRadius: 18,
     elevation: 10,
-    padding: 20,
+    padding: 10,
     justifyContent: "center",
   },
   comment: {
-    marginTop: 10,
+    marginTop: -10,
     fontSize: 12.5,
     color: COLORS.dark,
     lineHeight: 20,
