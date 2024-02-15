@@ -32,8 +32,8 @@ export default function Settings() {
   }
 
   return (
-    <View>
-      <Text>Settings Screen!</Text>
+    <View style={styles.container}>
+      {/* <Text>Settings Screen!</Text> */}
 
       <Button
         title="Logout"
