@@ -10,6 +10,7 @@ import Register from "./components/Register";
 import Help from "./components/Help";
 import { supabase } from "./lib/supabase";
 import PetProfile from "./screens/Pet/PetProfile";
+import PetInfoUploader from "./screens/Pet/PetInfoUploader";
 import PetInfo from "./screens/Pet/PetInfo";
 import Settings from "./components/Settings";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -102,6 +103,11 @@ export default function App() {
             component={PetProfile}
             options={{ tabBarButton: () => null }}
           />
+          <Tab.Screen
+            name="PetInfoUploader"
+            component={PetInfoUploader}
+            options={{ tabBarButton: () => null }}
+          />
         </Tab.Navigator>
       ) : (
         <Stack.Navigator>
@@ -119,6 +125,7 @@ export default function App() {
           <Stack.Screen name="Settings" component={Settings} />
           <Stack.Screen name="PetInfo" component={PetInfo} />
           <Stack.Screen name="PetProfile" component={PetProfile} />
+          <Stack.Screen name="PetInfoUploader" component={PetInfoUploader} />
         </Stack.Navigator>
       )}
     </NavigationContainer>

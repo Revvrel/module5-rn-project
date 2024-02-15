@@ -16,6 +16,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { supabase } from "../../lib/supabase";
 import PetProfileCard from "../../components/Pet/PetProfileCard";
 import COLORS from "../../components/Pet/const/colors";
+import { ScrollView } from "react-native-gesture-handler";
 
 const Stack = createStackNavigator();
 
