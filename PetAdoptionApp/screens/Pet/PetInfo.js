@@ -107,6 +107,7 @@ export default function PetInfo() {
             >
               Pet Profile
             </Text>
+            <Text style={{textAlign: "center", paddingBottom: 20}}>Create a pet profile to put pets up for adoption here!</Text>
             <TextInput
               style={styles.input}
               //label={<CustomLabel color="#E4BDFF">Name...</CustomLabel>}
@@ -167,8 +168,9 @@ export default function PetInfo() {
               value={gender}
               onChangeText={(gender) => setGender(gender)}
             />
-          </View>
-          <Button
+
+
+            <Button
             buttonStyle={{
               backgroundColor: '#FFB197',
               borderRadius: 50,
@@ -183,8 +185,10 @@ export default function PetInfo() {
               }}
             title="Submit"
             onPress={handleSubmit}
-          />
-          <View style={{ marginVertical: 10 }} />
+            />
+
+
+             <View style={{ marginVertical: 10 }} />
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
@@ -194,7 +198,7 @@ export default function PetInfo() {
                   navigation.navigate("PetProfile");
                 }}
               >
-                <Text style={{ color: "blue" }}>Go to pet profile page</Text>
+                <Text style={styles.link}>Go to pet profile page</Text>
               </TouchableOpacity>
             </View>
             <View>
@@ -203,10 +207,16 @@ export default function PetInfo() {
                   navigation.navigate("PetInfoUploader");
                 }}
               >
-                <Text style={{ color: "blue" }}>Upload pet's photo</Text>
+                <Text style={styles.link}>Upload pet's photo</Text>
               </TouchableOpacity>
             </View>
           </View>
+            
+
+
+          </View>
+          
+         
         </ScrollView>
       </NavigationContainer>
     </PaperProvider>
