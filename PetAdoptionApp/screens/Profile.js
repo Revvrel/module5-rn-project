@@ -17,6 +17,7 @@ import {
 } from "react-native";
 import CameraTest from "../components/CameraTest.js";
 
+
 export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState(null);
@@ -200,8 +201,10 @@ export default function Profile() {
 
   return (
     <ScrollView>
+
+      <View style={styles.container}>
       <View style={{ marginVertical: 10 }} />
-      <Text style={styles.h1}>{username} Profile</Text>
+      <Text style={styles.h1}>{username}'s Profile</Text>
       {showCamera ? (
         <Camera
           style={stylesCamera.camera}
@@ -240,6 +243,7 @@ export default function Profile() {
                     style={{
                       width: 150,
                       height: 150,
+                      borderRadius: 100,
                       backgroundColor: "black",
                     }}
                   />
@@ -249,34 +253,43 @@ export default function Profile() {
           </View>
         </View>
       )}
-      <View style={{ marginVertical: 10 }} />
-      <Text>Full Name</Text>
-      <TextInput
-        value={fullName}
-        autoComplete="off"
-        autoCorrect={false}
-        onChangeText={setFullName}
-        style={styles.input}
-      />
-      <View style={{ marginVertical: 10 }} />
-      <Text>Email</Text>
-      <TextInput value={email} editable={false} style={styles.input} />
-      <View style={{ marginVertical: 10 }} />
-      <Text>Phone</Text>
-      <TextInput
-        value={phone}
-        autoComplete="off"
-        autoCorrect={false}
-        onChangeText={setPhone}
-        style={styles.input}
-      />
-      <View style={{ marginVertical: 10 }} />
-      <Text>Date Of Birth</Text>
-      <TextInput value={dateOfBirth} editable={false} style={styles.input} />
-      <View style={{ marginVertical: 10 }} />
+
+        <View style={styles.profileDetailContainer}>
+          
+
+          <View style={{ marginVertical: 10 }} />
+          
+
+          <Text style={styles.inputLabel}>Full Name: </Text>
+          <TextInput
+            value={fullName}
+            autoComplete="off"
+            autoCorrect={false}
+            onChangeText={setFullName}
+            style={styles.input}
+          />
+          
+      
+          <Text style={styles.inputLabel}>Email: </Text>
+          <TextInput value={email} editable={false} style={styles.input} />
+          
+          <Text style={styles.inputLabel}>Phone Number:</Text>
+          <TextInput
+            value={phone}
+            autoComplete="off"
+            autoCorrect={false}
+            onChangeText={setPhone}
+            style={styles.input}
+          />
+
+          <Text style={styles.inputLabel}>Date Of Birth:</Text>
+          <TextInput value={dateOfBirth} editable={false} style={styles.input} />
+          
+          <View style={{ marginVertical: 10 }} />
+
       {showPasswordInputs && (
         <View>
-          <Text>Change Password</Text>
+          <Text style={styles.inputLabel}>Change Password</Text>
           <TextInput
             placeholder="Enter new password"
             value={newPassword}
@@ -292,7 +305,9 @@ export default function Profile() {
             style={styles.input}
           />
         </View>
-      )}
+          )}
+          
+
       {changePasswordButtonVisible && (
         <Button
           title="Change Password"
@@ -307,7 +322,6 @@ export default function Profile() {
             width: 200,
             justifyContent: "center",
             marginHorizontal: 90,
-            marginVertical: 10,
           }}
         />
       )}
@@ -328,23 +342,23 @@ export default function Profile() {
           marginVertical: 10,
         }}
       />
-      <View style={{ marginVertical: 10 }} />
-      <Button
-        title="Logout"
-        onPress={handleLogout}
-        buttonStyle={{
-          backgroundColor: "#FFB197",
-          borderRadius: 50,
-          padding: 15,
-          height: 55,
-        }}
-        containerStyle={{
-          width: 200,
-          justifyContent: "center",
-          marginHorizontal: 90,
-          marginVertical: 10,
-        }}
-      />
+          <View style={{ marginVertical: 10 }} />
+        
+      
+          
+        <TouchableOpacity
+           onPress={handleLogout}
+        >
+          <Text style={[styles.link, {textAlign: 'center'}]}>Logout</Text>
+          </TouchableOpacity>
+          
+          <View style={{ marginVertical: 10 }} />
+
+
+
+
+        </View> 
+        </View>
     </ScrollView>
   );
 }

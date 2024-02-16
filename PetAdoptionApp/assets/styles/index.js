@@ -363,6 +363,20 @@ const styles = StyleSheet.create({
     iconMenu: {
         alignItems: "center",
     },
+
+    // Screens - Profile
+    profileDetailContainer: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+    inputLabel: {
+        marginLeft: 20,
+        fontSize: 15,
+        marginTop: 20,
+        fontWeight: 'bold',
+        color: '#4B413E',
+    }
+
 });
 
 export { styles }
