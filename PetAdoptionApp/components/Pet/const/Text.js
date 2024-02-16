@@ -9,7 +9,7 @@ const Text = ({ children, style, variant }) => {
                 style,
                 {
                     fontFamily:
-                        variant === 'bold' ? 'Sk-Modernist-Bold' : 'Sk-Modernist-Regular',
+                        variant === 'bold' ? 'Poppins-Bold' : 'Poppins-Regular',
                 },
             ]}
         >
