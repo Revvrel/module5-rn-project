@@ -71,7 +71,7 @@ export default function Home() {
             <Ionicons
               name="settings-outline"
               size={25}
-              color="blue"
+              color="#B6A6A1"
               onPress={() => {
                 navigation.navigate("Settings");
               }}

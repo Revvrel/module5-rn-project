@@ -76,17 +76,17 @@ export default function Login() {
         onPress={handleLogin}
         disabled={loading}
         buttonStyle={{
-                backgroundColor: '#FFB197',
+          backgroundColor: '#FFB197',
           borderRadius: 50,
           padding: 15,
           height: 55,
-              }}
+        }}
         containerStyle={{
           width: 150,
           justifyContent: 'center',
           marginHorizontal: 120,
-                marginVertical: 10,
-              }}
+          marginVertical: 10,
+        }}
       />
       <View style={{ marginVertical: 10 }} />
       <View style={{textAlign: 'center', flexDirection: 'row',justifyContent: 'center' }}>
