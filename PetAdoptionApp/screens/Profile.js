@@ -175,7 +175,7 @@ export default function Profile() {
     const arrayBuffer = await new Response(blob).arrayBuffer();
     const fileName = `public/${Date.now()}.jpg`;
     const { error } = await supabase.storage
-      .from("testPhoto")
+      .from("pet_infos")
       .upload(fileName, arrayBuffer, {
         contentType: "image/jpeg",
         upsert: false,

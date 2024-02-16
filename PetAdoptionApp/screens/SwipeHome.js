@@ -17,7 +17,7 @@ const SwipeHome = () => {
               navigation.navigate("PetInfo");
             }}
           >
-            <Text style={{ color: "blue" }}>Go to pet info page</Text>
+            <Text style={{ color: "blue" }}>Upload pet's info</Text>
           </TouchableOpacity>
         </View>
       </View>
