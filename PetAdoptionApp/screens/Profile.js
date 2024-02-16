@@ -146,10 +146,22 @@ export default function Profile() {
   if (!permission.granted) {
     return (
       <View style={styles.container}>
-        <Text style={{ textAlign: "center" }}>
+        <Text style={{ textAlign: "center", paddingBottom: 20 }}>
           We need your permission to show the camera
         </Text>
-        <Button onPress={requestPermission} title="grant permission" />
+        <Button buttonStyle={{
+          backgroundColor: "#FFB197",
+          borderRadius: 50,
+          padding: 15,
+          height: 55,
+        }}
+        containerStyle={{
+          width: 200,
+          justifyContent: "center",
+          marginHorizontal: 90,
+          marginVertical: 10,
+          }}
+          onPress={requestPermission} title="Grant Permission" />
       </View>
     );
   }

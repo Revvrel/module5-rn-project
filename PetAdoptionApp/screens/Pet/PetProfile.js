@@ -7,6 +7,7 @@ import {
   View,
   Image,
   StyleSheet,
+  ScrollView
 } from "react-native";
 import { useEffect, useState } from "react";
 
@@ -15,7 +16,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { supabase } from "../../lib/supabase";
 import COLORS from "../../components/Pet/const/colors";
-import { ScrollView } from "react-native-gesture-handler";
 import { Button } from "@rneui/themed";
 
 const Stack = createStackNavigator();
@@ -45,35 +45,51 @@ const PetProfile = ({ navigation }) => {
   }, []);
 
   return (
+   
+    <ScrollView contentContainerStyle={{ flex: 1 }}>
     <NavigationContainer independent={true}>
       <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
         <StatusBar backgroundColor={COLORS.background} />
-        <View style={{ height: 380, backgroundColor: COLORS.background }}>
+        <View style={{
+          height: 400,
+            backgroundColor: COLORS.background
+        }}>
           {fetchError && <Text>{fetchError}</Text>}
 
           <ImageBackground
             resizeMode="contain"
-            source={require("../../assets/images/ragDoll.jpg")} // Add your image source here
+            source={require("../../assets/images/choosePet1.jpg")} // Add your image source here
             style={{
-              height: 280,
-              top: 20,
+              height: 650,
+              width: '100%',
+              top: 0,
+              left: 0,
+              right: 0,
+              position:'absolute',
+              resizeMode: 'cover',
+              // zIndex: -99,
+              flex: 1
             }}
-          >
-            {/* Render Header */}
-            <View style={styles.header}>
+            >
+
+
+
+          <View style={{flexDirection:'column', height: '90%', justifyContent:'space-between', paddingHorizontal: 20,}}>
+
+            {/* Top Buttons */}
+            <View style={styles.topButtons}>
               <Icon
                 name="arrow-left"
                 size={28}
-                color={COLORS.dark}
+                color={"white"}
                 onPress={navigation.goBack}
               />
-              <Icon name="dots-vertical" size={28} color={COLORS.dark} />
+              <Icon name="dots-vertical" size={28} color={"white"} />
             </View>
-          </ImageBackground>
+              
 
-          {/* Pet Profile Card */}
-          <View style={styles.detailsContainer}>
-            {petProfiles && (
+
+              {petProfiles && (
               <View>
                 {petProfiles.map((profile) => (
                   <View
@@ -83,19 +99,21 @@ const PetProfile = ({ navigation }) => {
                       justifyContent: "space-between",
                     }}
                   >
-                    <Text
+
+                    {/* Pet Name */}
+                    <View style={{flexDirection: "row"}}>
+                      <Text
                       style={{
-                        fontSize: 20,
-                        color: COLORS.dark,
+                        fontSize: 24,
+                        color: 'white',
                         fontWeight: "bold",
                       }}
                     >
                       {profile.name}
-                    </Text>
-                    <View
-                      style={{ flexDirection: "row", alignItems: "center" }}
-                    >
-                      <Icon
+                      </Text>
+                      
+                      {/* Pet Gender */}
+                    <Icon
                         name={
                           profile.gender == "male"
                             ? "gender-male"
@@ -104,16 +122,86 @@ const PetProfile = ({ navigation }) => {
                         size={30}
                         color={COLORS.grey}
                       />
-                      <Text style={{ fontSize: 10 }}>
+                      {/* <Text style={{ fontSize: 12, color: '#B6A6A1' }}>
                         {profile.gender == "male" ? "Male" : "Female"}
-                      </Text>
+                      </Text> */}
+
                     </View>
+
+
+                    
+                    
+
+                    
+                    
                   </View>
                 ))}
-              </View>
-            )}
+                  
 
-            {/* Render Pet breed and age */}
+
+                  {petProfiles && (
+                      <View style={styles.locationInfo}>
+                        {petProfiles.map((profile) => (
+                          <View
+                            key={profile.id}
+                            style={{
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                              marginTop: 5,
+                            }}
+                          >
+                            <Icon
+                              name="map-marker"
+                              color={COLORS.primary}
+                              size={20}
+                            />
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                color: COLORS.grey,
+                                marginLeft: 5,
+                              }}
+                            >
+                              {profile.location}
+                            </Text>
+
+                            
+                          </View>
+                        ))}
+                      </View>
+                    )}
+              </View>
+              )}
+
+            </View>
+              
+
+          </ImageBackground>
+
+          {/* Pet Profile Card */}
+          <View style={[styles.detailsContainer, {paddingHorizontal: 30}]}>
+            
+
+
+              <View >
+
+                    {/* <Icon name="map-marker" color={COLORS.primary} size={20} />
+                    
+                    <Text style={{ fontSize: 14, color: COLORS.grey, marginLeft: 5 }}>
+                      10880 Malibu Point, 90265
+                      </Text> */}
+
+                    
+                </View>
+
+              
+
+
+
+
+
+
+              
             {petProfiles && (
               <View>
                 {petProfiles.map((profile) => (
@@ -125,35 +213,13 @@ const PetProfile = ({ navigation }) => {
                       marginTop: 5,
                     }}
                   >
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: COLORS.dark,
-                      }}
+
+                    <View
+                      style={{ flexDirection: "row", alignItems: "center" }}
                     >
-                      Breed: {profile.breed}
-                    </Text>
-                    <Text style={{ fontSize: 13, color: COLORS.dark }}>
-                      Color: {profile.color}
-                    </Text>
-                  </View>
-                ))}
-              </View>
-            )}
 
-            {/* Render Pet price, weight & location */}
-            {petProfiles && (
-              <View>
-                {petProfiles.map((profile) => (
-                  <View
-                    key={profile.id}
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      marginTop: 5,
-                    }}
-                  >
-                    <Text
+                      {/* Adoption Cost */}
+                       <Text
                       style={{
                         fontSize: 15,
                         color: COLORS.dark,
@@ -161,9 +227,55 @@ const PetProfile = ({ navigation }) => {
                     >
                       ${profile.price}                      
                     </Text>
-                    <Text style={{ fontSize: 13, color: COLORS.dark, paddingLeft: 110 }}>
-                    Weight: {profile.weight}Kg
+                      
+                      
+                    </View>
+
+                    {/* Pet Breed */}
+                    <Text
+                      style={{
+                        fontSize: 13,
+                        color: COLORS.dark,
+
+                      }}
+                    >
+                      Breed: {profile.breed}
                     </Text>
+
+                    {/* Pet Color */}
+                    <Text style={{ fontSize: 13, color: COLORS.dark }}>
+                      Color: {profile.color}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+              )}
+              
+
+              
+
+
+
+
+              {petProfiles && (
+              <View>
+                {petProfiles.map((profile) => (
+                  <View
+                    key={profile.id}
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      marginTop: 5,
+                    }}
+                  >
+
+                     {/* Pet Weight */}
+                    <Text style={{ fontSize: 13, color: COLORS.dark}}>
+                    Weight: {profile.weight} kg
+                    </Text>
+
+
+                     {/* Pet Age */}
                     <Text style={{ fontSize: 13, color: COLORS.dark }}>
                       Age: {profile.age}
                     </Text>
@@ -172,121 +284,91 @@ const PetProfile = ({ navigation }) => {
               </View>
             )}
 
-            {/* Render location and icon */}
-            <View
-              style={{
-                marginTop: 5,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              {petProfiles && (
-                <View>
-                  {petProfiles.map((profile) => (
-                    <View
-                      key={profile.id}
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        marginTop: 5,
-                      }}
-                    >
-                      <Icon
-                        name="map-marker"
-                        color={COLORS.primary}
-                        size={20}
-                      />
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          color: COLORS.grey,
-                          marginLeft: 5,
-                        }}
-                      >
-                        {profile.location}
-                      </Text>
-                    </View>
-                  ))}
-                </View>
-              )}
-            </View>
-          </View>
-        </View>
+            
 
-        {/* Comment container */}
-        <View
-          style={{ marginTop: 80, justifyContent: "space-between", flex: 1 }}
-        >
-          <View>           
-            {/* Render user image , name and date */}
-            <View style={{ flexDirection: "row", paddingHorizontal: 20, paddingVertical: 20 }}>
-              <Image
-                source={require("../../assets/images/potts.jpg")}
-                style={{ height: 40, width: 40, borderRadius: 20 }}
-              />
               
-              <View style={{ flex: 1, paddingLeft: 10 }}>                
-                <Text
-                  style={{
-                    color: COLORS.dark,
-                    fontSize: 12,
-                    fontWeight: "bold",
-                  }}
-                >
-                  Pepper Potts
-                </Text>
-                <Text
-                  style={{
-                    color: COLORS.grey,
-                    fontSize: 11,
-                    fontWeight: "bold",
-                    marginTop: 2,
-                  }}
-                >
-                  Owner
-                </Text>
-              </View>
-              <Text style={{ color: COLORS.grey, fontSize: 12 }}>
-                Feb 11, 2024
-              </Text>
-            </View>
-            <Text style={styles.comment}>
-              I am migrating to another country and I can't take my cat along
-              sadly. Looking for kind people to adopt my cat.            
-            </Text>            
-          </View>
 
-          {/* Render footer */}
-          <View style={styles.footer}>
-            <View style={styles.iconCon}>
-              <Icon name="heart-outline" size={22} color={COLORS.white} />
-            </View>
-            <View style={styles.btn}>
-            <Text style={{ color: COLORS.white, fontWeight: "bold" }}>
-                ADOPTION
-            </Text>
-            {/* <Button
-            buttonStyle={{
-              backgroundColor: '#FFB197',
-              borderRadius: 50,
-              padding: 15,
-              height: 55,
-              }}
-            containerStyle={{
-              width: 150,
-              justifyContent: 'center',
-              marginHorizontal: 120,
-              marginVertical: 10,
-              }}
-            title="Adopt it"
-            onPress={alert("aa")}
-          /> */}
-            </View>
-          </View>         
+
+              <View style={styles.infoContainer}>
+                
+
+                 {/* Comment container */}
+                <View style={styles.detailContainer}>           
+                    {/* Render user image , name and date */}
+                    <View style={{ flexDirection: "row", paddingVertical: 30 }}>
+                      <Image
+                        source={require("../../assets/images/potts.jpg")}
+                        style={{ height: 40, width: 40, borderRadius: 20 }}
+                      />
+                      
+                    <View style={{ flex: 1, paddingLeft: 10 }}>   
+                      
+                      <Text
+                          style={{
+                            color: COLORS.grey,
+                            fontSize: 11,
+                            marginTop: 2,
+                          }}
+                        >
+                          Owner
+                      </Text>
+                      
+
+
+                        <Text
+                          style={{
+                            color: COLORS.dark,
+                            fontSize: 12,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Pepper Potts
+                        </Text>
+                        
+                    </View>
+                    
+
+                      <Text style={{ color: COLORS.grey, fontSize: 12 }}>
+                        Feb 11, 2024
+                    </Text>
+                    
+
+                    </View>
+                    <Text style={styles.comment}>
+                      I am migrating to another country and I can't take my cat along
+                      sadly. Looking for kind people to adopt my cat.            
+                    </Text>            
+                </View>
+                
+
+
+                {/* Render footer */}
+                <View style={styles.footer}>
+                  <View style={styles.iconCon}>
+                    <Icon name="heart-outline" size={22} color={COLORS.white} />
+                  </View>
+                  <View style={styles.btn}>
+                    <Text style={{ color: COLORS.white, fontWeight: "bold" }}>
+                      Adopt Me!
+                    </Text>
+                  </View>
+                </View>
+
+                
+
+
+
+
+              </View>
         </View>
+
+        </View>
+
+
       </SafeAreaView>
-    </NavigationContainer>
+      </NavigationContainer>
+      </ScrollView>
+   
   );
 };
 
@@ -294,14 +376,19 @@ export default PetProfile;
 
 const styles = StyleSheet.create({
   detailsContainer: {
-    height: 140,
+    // height: 120,
+    width: '100%',
     backgroundColor: COLORS.white,
-    marginHorizontal: 20,    
-    bottom: -50,
+    // marginHorizontal: 20,
+    top: 600,
+    flex: 1,
+    flexDirection: 'column',
+    bottom: -60,
     borderRadius: 18,
     elevation: 10,
-    padding: 10,
-    justifyContent: "center",
+    padding: 20,
+    justifyContent: "flex-start",
+    textAlign: "left",
   },
   comment: {
     marginTop: -10,
@@ -310,14 +397,43 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     marginHorizontal: 20,
   },
+  locationInfo: {
+    marginTop: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+  },
+  userIdentity: {
+    color: COLORS.grey,
+    fontSize: 11,
+    fontWeight: "bold",
+    marginTop: 2,
+
+  },
+  ownerDP: {
+    height: 40, 
+    width: 40, 
+    borderRadius: 20
+  },
+  ownerInfo: {
+    // flex: 1,
+    flexDirection: "column",
+  },
+  ownerName: {
+    color: COLORS.dark,
+    fontSize: 12,
+    fontWeight: "bold",
+
+  },
   footer: {
     height: 100,
-    backgroundColor: COLORS.light,
+    // backgroundColor: COLORS.light,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 30,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 20,
+    position: "fixed"
   },
   iconCon: {
     backgroundColor: COLORS.primary,
@@ -336,9 +452,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  header: {
+  topButtons: {
     flexDirection: "row",
-    padding: 20,
+    paddingVertical: 20,
     justifyContent: "space-between",
   },
 });

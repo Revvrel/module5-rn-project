@@ -1,6 +1,7 @@
 import { Camera } from "expo-camera";
 import { useState } from "react";
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Button } from '@rneui/themed';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { supabase } from "../../lib/supabase";
 
@@ -17,10 +18,22 @@ export default function App() {
     // Camera permissions are not granted yet
     return (
       <View style={styles.container}>
-        <Text style={{ textAlign: "center" }}>
+        <Text style={{ textAlign: "center", marginBottom: 20 }}>
           We need your permission to show the camera
         </Text>
-        <Button onPress={requestPermission} title="grant permission" />
+        <Button onPress={requestPermission} title="Grant Permission"
+        buttonStyle={{
+          backgroundColor: '#FFB197',
+          borderRadius: 50,
+          padding: 15,
+          height: 55,
+        }}
+        containerStyle={{
+          width: 200,
+          justifyContent: 'center',
+          marginHorizontal: 120,
+          marginVertical: 10,
+        }}/>
       </View>
     );
   }
