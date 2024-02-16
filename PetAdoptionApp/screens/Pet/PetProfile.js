@@ -7,6 +7,7 @@ import {
   View,
   Image,
   StyleSheet,
+  ScrollView
 } from "react-native";
 import { useEffect, useState } from "react";
 
@@ -15,7 +16,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { supabase } from "../../lib/supabase";
 import COLORS from "../../components/Pet/const/colors";
-import { ScrollView } from "react-native-gesture-handler";
 import { Button } from "@rneui/themed";
 
 const Stack = createStackNavigator();
@@ -45,7 +45,8 @@ const PetProfile = ({ navigation }) => {
   }, []);
 
   return (
-    <ScrollView>
+   
+    <ScrollView contentContainerStyle={{ flex: 1 }}>
     <NavigationContainer independent={true}>
       <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
         <StatusBar backgroundColor={COLORS.background} />
@@ -66,7 +67,7 @@ const PetProfile = ({ navigation }) => {
               right: 0,
               position:'absolute',
               resizeMode: 'cover',
-              zIndex: -99,
+              // zIndex: -99,
               flex: 1
             }}
           >
@@ -94,7 +95,10 @@ const PetProfile = ({ navigation }) => {
                       justifyContent: "space-between",
                     }}
                   >
-                    <Text
+
+                    {/* Pet Name */}
+                    <View style={{flexDirection: "row"}}>
+                      <Text
                       style={{
                         fontSize: 20,
                         color: COLORS.dark,
@@ -102,69 +106,30 @@ const PetProfile = ({ navigation }) => {
                       }}
                     >
                       {profile.name}
-                    </Text>
-                    <View
-                      style={{ flexDirection: "row", alignItems: "center" }}
-                    >
-                      <Icon
+                      </Text>
+                      
+                      {/* Pet Gender */}
+                    <Icon
                         name={
                           profile.gender == "male"
                             ? "gender-male"
                             : "gender-female"
                         }
-                        size={30}
+                        size={26}
                         color={COLORS.grey}
                       />
-                      <Text style={{ fontSize: 10 }}>
+                      {/* <Text style={{ fontSize: 12, color: '#B6A6A1' }}>
                         {profile.gender == "male" ? "Male" : "Female"}
-                      </Text>
+                      </Text> */}
+
                     </View>
-                  </View>
-                ))}
-              </View>
-            )}
-
-            {/* Render Pet breed and age */}
-            {petProfiles && (
-              <View>
-                {petProfiles.map((profile) => (
-                  <View
-                    key={profile.id}
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      marginTop: 5,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: COLORS.dark,
-                      }}
+                    
+                    <View
+                      style={{ flexDirection: "row", alignItems: "center" }}
                     >
-                      Breed: {profile.breed}
-                    </Text>
-                    <Text style={{ fontSize: 13, color: COLORS.dark }}>
-                      Color: {profile.color}
-                    </Text>
-                  </View>
-                ))}
-              </View>
-            )}
 
-            {/* Render Pet price, weight & location */}
-            {petProfiles && (
-              <View>
-                {petProfiles.map((profile) => (
-                  <View
-                    key={profile.id}
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      marginTop: 5,
-                    }}
-                  >
-                    <Text
+                      {/* Adoption Cost */}
+                       <Text
                       style={{
                         fontSize: 15,
                         color: COLORS.dark,
@@ -172,26 +137,23 @@ const PetProfile = ({ navigation }) => {
                     >
                       ${profile.price}                      
                     </Text>
-                    <Text style={{ fontSize: 13, color: COLORS.dark, paddingLeft: 110 }}>
-                    Weight: {profile.weight}Kg
-                    </Text>
-                    <Text style={{ fontSize: 13, color: COLORS.dark }}>
-                      Age: {profile.age}
-                    </Text>
+                      
+                      
+                    </View>
                   </View>
                 ))}
               </View>
-            )}
+              )}
 
-              {/* Render location and icon */}
-              <View style={styles.infoContainer}>
-                <View style={styles.locationInfo}>
 
-                    <Icon name="map-marker" color={COLORS.primary} size={20} />
+
+              <View style={styles.locationInfo}>
+
+                    {/* <Icon name="map-marker" color={COLORS.primary} size={20} />
                     
                     <Text style={{ fontSize: 14, color: COLORS.grey, marginLeft: 5 }}>
                       10880 Malibu Point, 90265
-                      </Text>
+                      </Text> */}
 
                     {petProfiles && (
                       <View>
@@ -224,9 +186,77 @@ const PetProfile = ({ navigation }) => {
                     )}
                 </View>
 
+              
+
+              
+            {petProfiles && (
+              <View>
+                {petProfiles.map((profile) => (
+                  <View
+                    key={profile.id}
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      marginTop: 5,
+                    }}
+                  >
+
+                    {/* Pet Breed */}
+                    <Text
+                      style={{
+                        fontSize: 13,
+                        color: COLORS.dark,
+
+                      }}
+                    >
+                      Breed: {profile.breed}
+                    </Text>
+
+                    {/* Pet Color */}
+                    <Text style={{ fontSize: 13, color: COLORS.dark }}>
+                      Color: {profile.color}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+              )}
+              
+
+
+              {petProfiles && (
+              <View>
+                {petProfiles.map((profile) => (
+                  <View
+                    key={profile.id}
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      marginTop: 5,
+                    }}
+                  >
+
+                     {/* Pet Weight */}
+                    <Text style={{ fontSize: 13, color: COLORS.dark}}>
+                    Weight: {profile.weight} kg
+                    </Text>
+
+
+                     {/* Pet Age */}
+                    <Text style={{ fontSize: 13, color: COLORS.dark }}>
+                      Age: {profile.age}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            )}
+
+            
+
+              <View style={styles.infoContainer}>
+                
 
                  {/* Comment container */}
-                  <View style={styles.detailContainer}>           
+                <View style={styles.detailContainer}>           
                     {/* Render user image , name and date */}
                     <View style={{ flexDirection: "row", paddingHorizontal: 20, paddingVertical: 20 }}>
                       <Image
@@ -284,7 +314,7 @@ const PetProfile = ({ navigation }) => {
 
 
 
-          </View>
+              </View>
         </View>
 
         </View>
@@ -293,6 +323,7 @@ const PetProfile = ({ navigation }) => {
       </SafeAreaView>
       </NavigationContainer>
       </ScrollView>
+   
   );
 };
 
@@ -325,7 +356,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
   userIdentity: {
     color: COLORS.grey,
