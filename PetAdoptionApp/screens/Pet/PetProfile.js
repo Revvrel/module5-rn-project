@@ -52,7 +52,7 @@ const PetProfile = ({ navigation }) => {
         <StatusBar backgroundColor={COLORS.background} />
         <View style={{
           height: 400,
-          backgroundColor: COLORS.background
+            backgroundColor: COLORS.background
         }}>
           {fetchError && <Text>{fetchError}</Text>}
 
@@ -70,22 +70,26 @@ const PetProfile = ({ navigation }) => {
               // zIndex: -99,
               flex: 1
             }}
-          >
-            {/* Render Header */}
-            <View style={styles.header}>
+            >
+
+
+
+          <View style={{flexDirection:'column', height: '90%', justifyContent:'space-between', paddingHorizontal: 20,}}>
+
+            {/* Top Buttons */}
+            <View style={styles.topButtons}>
               <Icon
                 name="arrow-left"
                 size={28}
-                color={COLORS.light}
+                color={"white"}
                 onPress={navigation.goBack}
               />
-              <Icon name="dots-vertical" size={28} color={COLORS.light} />
+              <Icon name="dots-vertical" size={28} color={"white"} />
             </View>
-          </ImageBackground>
+              
 
-          {/* Pet Profile Card */}
-          <View style={styles.detailsContainer}>
-            {petProfiles && (
+
+              {petProfiles && (
               <View>
                 {petProfiles.map((profile) => (
                   <View
@@ -100,8 +104,8 @@ const PetProfile = ({ navigation }) => {
                     <View style={{flexDirection: "row"}}>
                       <Text
                       style={{
-                        fontSize: 20,
-                        color: COLORS.dark,
+                        fontSize: 24,
+                        color: 'white',
                         fontWeight: "bold",
                       }}
                     >
@@ -115,7 +119,7 @@ const PetProfile = ({ navigation }) => {
                             ? "gender-male"
                             : "gender-female"
                         }
-                        size={26}
+                        size={30}
                         color={COLORS.grey}
                       />
                       {/* <Text style={{ fontSize: 12, color: '#B6A6A1' }}>
@@ -123,40 +127,20 @@ const PetProfile = ({ navigation }) => {
                       </Text> */}
 
                     </View>
-                    
-                    <View
-                      style={{ flexDirection: "row", alignItems: "center" }}
-                    >
 
-                      {/* Adoption Cost */}
-                       <Text
-                      style={{
-                        fontSize: 15,
-                        color: COLORS.dark,
-                      }}
-                    >
-                      ${profile.price}                      
-                    </Text>
-                      
-                      
-                    </View>
+
+                    
+                    
+
+                    
+                    
                   </View>
                 ))}
-              </View>
-              )}
+                  
 
 
-
-              <View style={styles.locationInfo}>
-
-                    {/* <Icon name="map-marker" color={COLORS.primary} size={20} />
-                    
-                    <Text style={{ fontSize: 14, color: COLORS.grey, marginLeft: 5 }}>
-                      10880 Malibu Point, 90265
-                      </Text> */}
-
-                    {petProfiles && (
-                      <View>
+                  {petProfiles && (
+                      <View style={styles.locationInfo}>
                         {petProfiles.map((profile) => (
                           <View
                             key={profile.id}
@@ -180,13 +164,42 @@ const PetProfile = ({ navigation }) => {
                             >
                               {profile.location}
                             </Text>
+
+                            
                           </View>
                         ))}
                       </View>
                     )}
+              </View>
+              )}
+
+            </View>
+              
+
+          </ImageBackground>
+
+          {/* Pet Profile Card */}
+          <View style={[styles.detailsContainer, {paddingHorizontal: 30}]}>
+            
+
+
+              <View >
+
+                    {/* <Icon name="map-marker" color={COLORS.primary} size={20} />
+                    
+                    <Text style={{ fontSize: 14, color: COLORS.grey, marginLeft: 5 }}>
+                      10880 Malibu Point, 90265
+                      </Text> */}
+
+                    
                 </View>
 
               
+
+
+
+
+
 
               
             {petProfiles && (
@@ -200,6 +213,23 @@ const PetProfile = ({ navigation }) => {
                       marginTop: 5,
                     }}
                   >
+
+                    <View
+                      style={{ flexDirection: "row", alignItems: "center" }}
+                    >
+
+                      {/* Adoption Cost */}
+                       <Text
+                      style={{
+                        fontSize: 15,
+                        color: COLORS.dark,
+                      }}
+                    >
+                      ${profile.price}                      
+                    </Text>
+                      
+                      
+                    </View>
 
                     {/* Pet Breed */}
                     <Text
@@ -221,6 +251,10 @@ const PetProfile = ({ navigation }) => {
               </View>
               )}
               
+
+              
+
+
 
 
               {petProfiles && (
@@ -252,19 +286,35 @@ const PetProfile = ({ navigation }) => {
 
             
 
+              
+
+
               <View style={styles.infoContainer}>
                 
 
                  {/* Comment container */}
                 <View style={styles.detailContainer}>           
                     {/* Render user image , name and date */}
-                    <View style={{ flexDirection: "row", paddingHorizontal: 20, paddingVertical: 20 }}>
+                    <View style={{ flexDirection: "row", paddingVertical: 30 }}>
                       <Image
                         source={require("../../assets/images/potts.jpg")}
                         style={{ height: 40, width: 40, borderRadius: 20 }}
                       />
                       
-                      <View style={{ flex: 1, paddingLeft: 10 }}>                
+                    <View style={{ flex: 1, paddingLeft: 10 }}>   
+                      
+                      <Text
+                          style={{
+                            color: COLORS.grey,
+                            fontSize: 11,
+                            marginTop: 2,
+                          }}
+                        >
+                          Owner
+                      </Text>
+                      
+
+
                         <Text
                           style={{
                             color: COLORS.dark,
@@ -274,20 +324,15 @@ const PetProfile = ({ navigation }) => {
                         >
                           Pepper Potts
                         </Text>
-                        <Text
-                          style={{
-                            color: COLORS.grey,
-                            fontSize: 11,
-                            fontWeight: "bold",
-                            marginTop: 2,
-                          }}
-                        >
-                          Owner
-                        </Text>
-                      </View>
+                        
+                    </View>
+                    
+
                       <Text style={{ color: COLORS.grey, fontSize: 12 }}>
                         Feb 11, 2024
-                      </Text>
+                    </Text>
+                    
+
                     </View>
                     <Text style={styles.comment}>
                       I am migrating to another country and I can't take my cat along
@@ -407,9 +452,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  header: {
+  topButtons: {
     flexDirection: "row",
-    padding: 20,
+    paddingVertical: 20,
     justifyContent: "space-between",
   },
 });
