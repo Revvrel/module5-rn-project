@@ -184,159 +184,109 @@ const PetProfile = ({ navigation }) => {
             )}
 
               {/* Render location and icon */}
-              <View>
-                <View
-              style={styles.locationInfo}
-            >
+              <View style={styles.infoContainer}>
+                <View style={styles.locationInfo}>
 
-              <Icon name="map-marker" color={COLORS.primary} size={20} />
-              
-              <Text style={{ fontSize: 14, color: COLORS.grey, marginLeft: 5 }}>
-                10880 Malibu Point, 90265
-                </Text>
+                    <Icon name="map-marker" color={COLORS.primary} size={20} />
+                    
+                    <Text style={{ fontSize: 14, color: COLORS.grey, marginLeft: 5 }}>
+                      10880 Malibu Point, 90265
+                      </Text>
 
-              {petProfiles && (
-                <View>
-                  {petProfiles.map((profile) => (
-                    <View
-                      key={profile.id}
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        marginTop: 5,
-                      }}
-                    >
-                      <Icon
-                        name="map-marker"
-                        color={COLORS.primary}
-                        size={20}
+                    {petProfiles && (
+                      <View>
+                        {petProfiles.map((profile) => (
+                          <View
+                            key={profile.id}
+                            style={{
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                              marginTop: 5,
+                            }}
+                          >
+                            <Icon
+                              name="map-marker"
+                              color={COLORS.primary}
+                              size={20}
+                            />
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                color: COLORS.grey,
+                                marginLeft: 5,
+                              }}
+                            >
+                              {profile.location}
+                            </Text>
+                          </View>
+                        ))}
+                      </View>
+                    )}
+                </View>
+
+
+                 {/* Comment container */}
+                  <View style={styles.detailContainer}>           
+                    {/* Render user image , name and date */}
+                    <View style={{ flexDirection: "row", paddingHorizontal: 20, paddingVertical: 20 }}>
+                      <Image
+                        source={require("../../assets/images/potts.jpg")}
+                        style={{ height: 40, width: 40, borderRadius: 20 }}
                       />
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          color: COLORS.grey,
-                          marginLeft: 5,
-                        }}
-                      >
-                        {profile.location}
+                      
+                      <View style={{ flex: 1, paddingLeft: 10 }}>                
+                        <Text
+                          style={{
+                            color: COLORS.dark,
+                            fontSize: 12,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Pepper Potts
+                        </Text>
+                        <Text
+                          style={{
+                            color: COLORS.grey,
+                            fontSize: 11,
+                            fontWeight: "bold",
+                            marginTop: 2,
+                          }}
+                        >
+                          Owner
+                        </Text>
+                      </View>
+                      <Text style={{ color: COLORS.grey, fontSize: 12 }}>
+                        Feb 11, 2024
                       </Text>
                     </View>
-                  ))}
+                    <Text style={styles.comment}>
+                      I am migrating to another country and I can't take my cat along
+                      sadly. Looking for kind people to adopt my cat.            
+                    </Text>            
                 </View>
-              )}
-            </View>
+                
+
+
+                {/* Render footer */}
+                <View style={styles.footer}>
+                  <View style={styles.iconCon}>
+                    <Icon name="heart-outline" size={22} color={COLORS.white} />
+                  </View>
+                  <View style={styles.btn}>
+                    <Text style={{ color: COLORS.white, fontWeight: "bold" }}>
+                      Adopt Me!
+                    </Text>
+                  </View>
+                </View>
+
+                
+
+
+
+
           </View>
         </View>
 
-        {/* Comment container */}
-        <View
-          style={{ marginTop: 80, justifyContent: "space-between", flex: 1 }}
-        >
-          <View>           
-            {/* Render user image , name and date */}
-            <View style={{ flexDirection: "row", paddingHorizontal: 20, paddingVertical: 20 }}>
-              <Image
-                source={require("../../assets/images/potts.jpg")}
-                style={{ height: 40, width: 40, borderRadius: 20 }}
-              />
-              
-              <View style={{ flex: 1, paddingLeft: 10 }}>                
-                <Text
-                  style={{
-                    color: COLORS.dark,
-                    fontSize: 12,
-                    fontWeight: "bold",
-                  }}
-                >
-                  Pepper Potts
-                </Text>
-                <Text
-                  style={{
-                    color: COLORS.grey,
-                    fontSize: 11,
-                    fontWeight: "bold",
-                    marginTop: 2,
-                  }}
-                >
-                  Owner
-                </Text>
-              </View>
-              <Text style={{ color: COLORS.grey, fontSize: 12 }}>
-                Feb 11, 2024
-              </Text>
-            </View>
-            <Text style={styles.comment}>
-              I am migrating to another country and I can't take my cat along
-              sadly. Looking for kind people to adopt my cat.            
-            </Text>            
-          </View>
-
-                
-
-
-                </View>
-
-
-
-
-                {/* Comment container */}
-              <View
-                  style={{
-                    marginTop: 30,
-                    // justifyContent: "space-between"
-                  }}
-              >
-                <View>
-                  {/* Render user image , name and date */}
-                  <View>
-                    <Image
-                      source={require("../../assets/images/potts.jpg")}
-                      style={styles.ownerDP}
-                    />
-                    <View style={styles.ownerInfo}>
-                      <Text style={styles.userIdentity}>
-                        Owner
-                      </Text>
-                      <Text style={styles.ownerName}>
-                        Pepper Potts
-                      </Text>
-                    </View>
-                      
-                    <Text style={{ color: COLORS.grey, fontSize: 12 }}>
-                      Feb 11, 2024
-                    </Text>
-                  </View>
-                    
-
-                  <Text style={styles.comment}>
-                    I am migrating to another country and I can't take my cat along
-                    sadly. Looking for kind people to adopt my cat.
-                  </Text>
-                </View>
-
-
-                  {/* Render footer */}
-          <View style={styles.footer}>
-            <View style={styles.iconCon}>
-              <Icon name="heart-outline" size={22} color={COLORS.white} />
-            </View>
-            <View style={styles.btn}>
-              <Text style={{ color: COLORS.white, fontWeight: "bold" }}>
-                Adopt Me!
-              </Text>
-            </View>
-          </View>
-                  
-
-
-
-
-
-
-
-
-                
-          </View>
         </View>
 
 
