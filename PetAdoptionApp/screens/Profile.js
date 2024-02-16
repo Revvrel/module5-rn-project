@@ -15,7 +15,8 @@ import {
   ScrollView,
   TextInput,
 } from "react-native";
-import CameraTest from "../components/CameraTest.js";
+import defaultPic from "../assets/images/profileIcon.jpg";
+import * as ImageManipulator from "expo-image-manipulator";
 
 export default function Profile() {
   const [loading, setLoading] = useState(true);
@@ -28,85 +29,71 @@ export default function Profile() {
   const [newPassword, setNewPassword] = useState(null);
   const [confirmNewPassword, setConfirmNewPassword] = useState(null);
   const [showPasswordInputs, setShowPasswordInputs] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState(null);
   const [changePasswordButtonVisible, setChangePasswordButtonVisible] =
     useState(true);
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [camera, setCamera] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
-  const [image, setImage] = useState(null);
 
   const navigation = useNavigation();
 
   useEffect(() => {
     fetchSession();
-  }, []);
-
-  useEffect(() => {
-    if (session) getProfile();
-  }, [session]);
+}, []);
 
   async function fetchSession() {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    setSession(session);
-    setUsername(user.user_metadata.username);
-    setEmail(user.email);
-    setFullName(user.user_metadata.fullName);
-    setDateOfBirth(user.user_metadata.dateOfBirth);
-    setPhone(user.phone);
-    // console.log(user);
-  }
-
-  async function getProfile() {
     try {
-      setLoading(true);
-      if (!session) {
-        console.error("No active session");
-        return;
-      }
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
-      const { data, error, status } = await supabase
-        .from("profiles")
-        .select(`avatar_url`)
-        .eq("id", session.user.id)
-        .single();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
+      setSession(session);
+      setUsername(user.user_metadata.username);
+      setEmail(user.email);
+      setFullName(user.user_metadata.fullName);
+      setDateOfBirth(user.user_metadata.dateOfBirth);
+      setPhone(user.phone);
+      console.log(user);
+
+      const { data: imageData, error: imageError } = await supabase
+      .from("profiles")
+      .select("avatar_url")
+      .eq("id", session.user.id);
+
+    if (imageData && imageData.length > 0) {
+      const avatarUrlData = imageData[0].avatar_url;
+      console.log(avatarUrlData);
+
+      const { data, error } = await supabase.storage
+        .from("profilePhoto")
+        .download(session.user.id + `/` + avatarUrlData);
+
+      setLoading(false);
       if (error) {
         throw error;
       }
 
-      if (data) {
-        setAvatarUrl(data.avatar_url);
-        console.log(data.avatar_url);
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message);
-      }
-    } finally {
-      setLoading(false);
+      const fr = new FileReader();
+      fr.readAsDataURL(data);
+      fr.onload = () => {
+        setAvatarUrl(fr.result);
+      };
     }
-  }
 
-  async function handleLogout() {
-    const { error } = await supabase.auth.signOut();
-    if (!error) {
-      navigation.navigate("BlankPage");
-    }
-    if (error) {
-      alert(error.message);
+    } catch (error) {
+      console.log("Error fetching session:", error.message);
     }
   }
 
   async function handleUpdateUser() {
     if (!session) {
-      console.error("No active session");
+      console.log("No active session");
       return;
     }
 
@@ -149,19 +136,22 @@ export default function Profile() {
         <Text style={{ textAlign: "center", paddingBottom: 20 }}>
           We need your permission to show the camera
         </Text>
-        <Button buttonStyle={{
-          backgroundColor: "#FFB197",
-          borderRadius: 50,
-          padding: 15,
-          height: 55,
-        }}
-        containerStyle={{
-          width: 200,
-          justifyContent: "center",
-          marginHorizontal: 90,
-          marginVertical: 10,
+        <Button
+          buttonStyle={{
+            backgroundColor: "#FFB197",
+            borderRadius: 50,
+            padding: 15,
+            height: 55,
           }}
-          onPress={requestPermission} title="Grant Permission" />
+          containerStyle={{
+            width: 200,
+            justifyContent: "center",
+            marginHorizontal: 90,
+            marginVertical: 10,
+          }}
+          onPress={requestPermission}
+          title="Grant Permission"
+        />
       </View>
     );
   }
@@ -176,8 +166,19 @@ export default function Profile() {
     if (permission.granted) {
       const photo = await camera.takePictureAsync({ base64: true });
       setShowCamera(false);
-      setImage(photo);
-      uploadImage(photo.uri);
+      compressImage(photo.uri);
+    }
+  };
+
+  const compressImage = async (uri) => {
+    try {
+      const compressedImage = await ImageManipulator.manipulateAsync(uri, [], {
+        compress: 0.3,
+        format: ImageManipulator.SaveFormat.JPEG,
+      });
+      uploadImage(compressedImage.uri);
+    } catch (error) {
+      console.log("Error compressing image: ", error);
     }
   };
 
@@ -185,17 +186,35 @@ export default function Profile() {
     const response = await fetch(uri);
     const blob = await response.blob();
     const arrayBuffer = await new Response(blob).arrayBuffer();
-    const fileName = session.user.id+`/${Date.now()}.jpg`;
-    const { error } = await supabase.storage
+    const fileName = session.user.user_metadata.username + "_profilePic.jpg";
+    const filePath = session.user.id + `/` + fileName;
+
+    // Upload image to supabase storage
+    const { data, error } = await supabase.storage
       .from("profilePhoto")
-      .upload(fileName, arrayBuffer, {
+      .upload(filePath, arrayBuffer, {
         contentType: "image/jpeg",
-        upsert: false,
+        upsert: true,
       });
     if (error) {
-      console.error("Error uploading image: ", error);
+      console.log("Error uploading image: ", error);
+      return;
     }
-    console.log("ArrayBuffer: " + arrayBuffer.byteLength);
+    console.log("Image uploaded successfully");
+
+    // Update avatar URL in the profiles table
+    const { data: dataImage, error: errorImage } = await supabase
+      .from("profiles")
+      .upsert({ id: session.user.id, avatar_url: fileName });
+
+    if (errorImage) {
+      console.log("Error updating profile image: ", errorImage);
+      return;
+    }
+
+    setAvatarUrl(uri);
+
+    alert("Profile image updated successfully");
   };
 
   return (
@@ -211,14 +230,20 @@ export default function Profile() {
           }}
         >
           <View style={stylesCamera.buttonContainer}>
-            <TouchableOpacity style={stylesCamera.button} onPress={toggleCameraType}>
+            <TouchableOpacity
+              style={stylesCamera.button}
+              onPress={toggleCameraType}
+            >
               <MaterialCommunityIcons
                 name="camera-flip"
                 size={36}
                 color="black"
               />
             </TouchableOpacity>
-            <TouchableOpacity style={stylesCamera.button} onPress={captureImage}>
+            <TouchableOpacity
+              style={stylesCamera.button}
+              onPress={captureImage}
+            >
               <MaterialCommunityIcons name="camera" size={36} color="black" />
             </TouchableOpacity>
           </View>
@@ -233,18 +258,16 @@ export default function Profile() {
             }}
           >
             <View style={{ width: "100%", alignItems: "center" }}>
-              {true && (
-                <Pressable onPress={() => setShowCamera(true)}>
-                  <Image
-                    source={image}
-                    style={{
-                      width: 150,
-                      height: 150,
-                      backgroundColor: "black",
-                    }}
-                  />
-                </Pressable>
-              )}
+              <Pressable onPress={() => setShowCamera(true)}>
+                <Image
+                  source={avatarUrl ? { uri: avatarUrl } : defaultPic}
+                  style={{
+                    width: 150,
+                    height: 150,
+                    backgroundColor: "black",
+                  }}
+                />
+              </Pressable>
             </View>
           </View>
         </View>
@@ -329,22 +352,6 @@ export default function Profile() {
         }}
       />
       <View style={{ marginVertical: 10 }} />
-      <Button
-        title="Logout"
-        onPress={handleLogout}
-        buttonStyle={{
-          backgroundColor: "#FFB197",
-          borderRadius: 50,
-          padding: 15,
-          height: 55,
-        }}
-        containerStyle={{
-          width: 200,
-          justifyContent: "center",
-          marginHorizontal: 90,
-          marginVertical: 10,
-        }}
-      />
     </ScrollView>
   );
 }
