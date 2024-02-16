@@ -18,6 +18,8 @@ import { supabase } from "../../lib/supabase";
 import COLORS from "../../components/Pet/const/colors";
 import { Button } from "@rneui/themed";
 
+import { styles } from "../../assets/styles/PetProfile.styles.js";
+
 const Stack = createStackNavigator();
 
 const PetProfile = ({ navigation }) => {
@@ -45,15 +47,12 @@ const PetProfile = ({ navigation }) => {
   }, []);
 
   return (
-   
-    <ScrollView contentContainerStyle={{ flex: 1 }}>
+
     <NavigationContainer independent={true}>
-      <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
+      <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
         <StatusBar backgroundColor={COLORS.background} />
-        <View style={{
-          height: 400,
-            backgroundColor: COLORS.background
-        }}>
+
+        <ScrollView style={{flex: 1}}>
           {fetchError && <Text>{fetchError}</Text>}
 
           <ImageBackground
@@ -119,8 +118,8 @@ const PetProfile = ({ navigation }) => {
                             ? "gender-male"
                             : "gender-female"
                         }
-                        size={30}
-                        color={COLORS.grey}
+                        size={23}
+                        color={COLORS.primary}
                       />
                       {/* <Text style={{ fontSize: 12, color: '#B6A6A1' }}>
                         {profile.gender == "male" ? "Male" : "Female"}
@@ -158,7 +157,7 @@ const PetProfile = ({ navigation }) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                color: COLORS.grey,
+                                color: 'white',
                                 marginLeft: 5,
                               }}
                             >
@@ -180,31 +179,26 @@ const PetProfile = ({ navigation }) => {
 
           {/* Pet Profile Card */}
           <View style={[styles.detailsContainer, {paddingHorizontal: 30}]}>
-            
+          
+              
 
+              {/* <View >
 
-              <View >
-
-                    {/* <Icon name="map-marker" color={COLORS.primary} size={20} />
+                    <Icon name="map-marker" color={COLORS.primary} size={20} />
                     
                     <Text style={{ fontSize: 14, color: COLORS.grey, marginLeft: 5 }}>
                       10880 Malibu Point, 90265
-                      </Text> */}
+                      </Text>
 
                     
-                </View>
-
+              </View> */}
               
-
-
-
-
-
 
               
             {petProfiles && (
               <View>
                 {petProfiles.map((profile) => (
+                  
                   <View
                     key={profile.id}
                     style={{
@@ -214,78 +208,85 @@ const PetProfile = ({ navigation }) => {
                     }}
                   >
 
-                    <View
-                      style={{ flexDirection: "row", alignItems: "center" }}
-                    >
+
+
+              <View style={styles.petDetailContainer}>
+                      
+
+                  <View style={styles.petDetailBox}>
+                    {/* Pet Color */}
+                      <Text style={styles.petDetail}>
+                        {profile.breed}
+                          {'\n'}
+                          <Text style={styles.petDetailLabel}>
+                          Breed
+                          </Text>
+                      </Text>
+                      </View>
+                      
+
+                  <View style={styles.petDetailBox}>
+                    {/* Pet Color */}
+                      <Text style={styles.petDetail}>
+                        {profile.color}
+                          {'\n'}
+                          <Text style={styles.petDetailLabel}>
+                          Color
+                          </Text>
+                      </Text>
+                      </View>
+                      
+
+                  <View style={styles.petDetailBox}>
+                    {/* Pet Color */}
+                      <Text style={styles.petDetail}>
+                        {profile.weight} kg
+                          {'\n'}
+                          <Text style={styles.petDetailLabel}>
+                          Weight
+                          </Text>
+                      </Text>
+                      </View>
+                      
+
+                  <View style={styles.petDetailBox}>
+                    {/* Pet Color */}
+                      <Text style={styles.petDetail}>
+                        {profile.age} years old
+                          {'\n'}
+                          <Text style={styles.petDetailLabel}>
+                          Age
+                          </Text>
+                      </Text>
+                  </View>
+
+                   
+                      
+                    
+
+                </View>
+                    
+
+                    
+
 
                       {/* Adoption Cost */}
-                       <Text
+                    {/* <Text
                       style={{
                         fontSize: 15,
                         color: COLORS.dark,
                       }}
                     >
                       ${profile.price}                      
-                    </Text>
+                    </Text> */}
                       
-                      
-                    </View>
 
-                    {/* Pet Breed */}
-                    <Text
-                      style={{
-                        fontSize: 13,
-                        color: COLORS.dark,
-
-                      }}
-                    >
-                      Breed: {profile.breed}
-                    </Text>
-
-                    {/* Pet Color */}
-                    <Text style={{ fontSize: 13, color: COLORS.dark }}>
-                      Color: {profile.color}
-                    </Text>
+                    
                   </View>
                 ))}
               </View>
               )}
               
-
-              
-
-
-
-
-              {petProfiles && (
-              <View>
-                {petProfiles.map((profile) => (
-                  <View
-                    key={profile.id}
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      marginTop: 5,
-                    }}
-                  >
-
-                     {/* Pet Weight */}
-                    <Text style={{ fontSize: 13, color: COLORS.dark}}>
-                    Weight: {profile.weight} kg
-                    </Text>
-
-
-                     {/* Pet Age */}
-                    <Text style={{ fontSize: 13, color: COLORS.dark }}>
-                      Age: {profile.age}
-                    </Text>
-                  </View>
-                ))}
-              </View>
-            )}
-
-            
-
               
 
 
@@ -293,56 +294,50 @@ const PetProfile = ({ navigation }) => {
                 
 
                  {/* Comment container */}
-                <View style={styles.detailContainer}>           
+        
                     {/* Render user image , name and date */}
-                    <View style={{ flexDirection: "row", paddingVertical: 30 }}>
+                  <View style={styles.ownerContainer}>
                       <Image
                         source={require("../../assets/images/potts.jpg")}
-                        style={{ height: 40, width: 40, borderRadius: 20 }}
+                        style={styles.ownerImg}
                       />
                       
-                    <View style={{ flex: 1, paddingLeft: 10 }}>   
+                    <View style={styles.ownerInfoBox}>   
                       
-                      <Text
-                          style={{
-                            color: COLORS.grey,
-                            fontSize: 11,
-                            marginTop: 2,
-                          }}
-                        >
+                      <Text style={styles.ownerLabel}>
                           Owner
                       </Text>
                       
-
-
-                        <Text
-                          style={{
-                            color: COLORS.dark,
-                            fontSize: 12,
-                            fontWeight: "bold",
-                          }}
-                        >
-                          Pepper Potts
-                        </Text>
+                      <Text style={styles.ownerName} >
+                        Pepper Potts
+                      </Text>
                         
                     </View>
                     
 
-                      <Text style={{ color: COLORS.grey, fontSize: 12 }}>
+                    <Text style={{ color: COLORS.grey, fontSize: 12 }}>
                         Feb 11, 2024
                     </Text>
                     
 
-                    </View>
-                    <Text style={styles.comment}>
-                      I am migrating to another country and I can't take my cat along
-                      sadly. Looking for kind people to adopt my cat.            
-                    </Text>            
-                </View>
+                  </View>
+                  
+
+
+                  <Text style={styles.ownerComment}>
+                  Meet Samantha, a charming and affectionate feline looking for her forever home! Samantha is a spayed and vaccinated cat who has been a cherished member of our family for years.
+                  {'\n'}{'\n'}
+                      
+                  Due to personal circumstances, we're sadly unable to provide her with the attention and care she deserves. Samantha is a gentle soul who loves curling up in sunny spots and enjoys the occasional play session with her favorite toys. She's litter-trained and has a clean bill of health.
+                  {'\n'}{'\n'}
+                  
+                  We believe she would thrive in a calm and loving environment where she can receive plenty of affection and attention. If you're ready to open your heart and home to a wonderful companion, Samantha would love to meet you!
+                </Text>
                 
+                </View>
 
 
-                {/* Render footer */}
+              {/* Render footer */}
                 <View style={styles.footer}>
                   <View style={styles.iconCon}>
                     <Icon name="heart-outline" size={22} color={COLORS.white} />
@@ -354,108 +349,18 @@ const PetProfile = ({ navigation }) => {
                   </View>
                 </View>
 
-                
+
+              
 
 
-
-
-              </View>
         </View>
 
-        </View>
+        </ScrollView>
 
 
       </SafeAreaView>
       </NavigationContainer>
-      </ScrollView>
-   
   );
 };
 
 export default PetProfile;
-
-const styles = StyleSheet.create({
-  detailsContainer: {
-    // height: 120,
-    width: '100%',
-    backgroundColor: COLORS.white,
-    // marginHorizontal: 20,
-    top: 600,
-    flex: 1,
-    flexDirection: 'column',
-    bottom: -60,
-    borderRadius: 18,
-    elevation: 10,
-    padding: 20,
-    justifyContent: "flex-start",
-    textAlign: "left",
-  },
-  comment: {
-    marginTop: -10,
-    fontSize: 12.5,
-    color: COLORS.dark,
-    lineHeight: 20,
-    marginHorizontal: 20,
-  },
-  locationInfo: {
-    marginTop: 5,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-  },
-  userIdentity: {
-    color: COLORS.grey,
-    fontSize: 11,
-    fontWeight: "bold",
-    marginTop: 2,
-
-  },
-  ownerDP: {
-    height: 40, 
-    width: 40, 
-    borderRadius: 20
-  },
-  ownerInfo: {
-    // flex: 1,
-    flexDirection: "column",
-  },
-  ownerName: {
-    color: COLORS.dark,
-    fontSize: 12,
-    fontWeight: "bold",
-
-  },
-  footer: {
-    height: 100,
-    // backgroundColor: COLORS.light,
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 30,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    position: "fixed"
-  },
-  iconCon: {
-    backgroundColor: COLORS.primary,
-    width: 50,
-    height: 50,
-    borderRadius: 12,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 15,
-  },
-  btn: {
-    backgroundColor: COLORS.primary,
-    flex: 1,
-    height: 50,
-    borderRadius: 12,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  topButtons: {
-    flexDirection: "row",
-    paddingVertical: 20,
-    justifyContent: "space-between",
-  },
-});
-
