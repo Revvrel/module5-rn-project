@@ -185,9 +185,9 @@ export default function Profile() {
     const response = await fetch(uri);
     const blob = await response.blob();
     const arrayBuffer = await new Response(blob).arrayBuffer();
-    const fileName = `public/${Date.now()}.jpg`;
+    const fileName = session.user.id+`/${Date.now()}.jpg`;
     const { error } = await supabase.storage
-      .from("pet_infos")
+      .from("profilePhoto")
       .upload(fileName, arrayBuffer, {
         contentType: "image/jpeg",
         upsert: false,
