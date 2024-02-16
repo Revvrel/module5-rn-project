@@ -112,3 +112,4 @@ const styles = StyleSheet.create({
     color: "white",
   },
 });
+
