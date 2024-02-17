@@ -104,9 +104,9 @@ const PetProfile = ({ navigation }) => {
                       <Text
                       style={{
                         fontSize: 24,
-                        color: 'white',
-                        fontWeight: "bold",
-                      }}
+                        color: '#7D5224',
+                        fontWeight: 'bold',                  
+                      }}                  
                     >
                       {profile.name}
                       </Text>
@@ -157,8 +157,8 @@ const PetProfile = ({ navigation }) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                color: 'white',
-                                marginLeft: 5,
+                                color: '#7D5224',
+                                marginLeft: 5,                                
                               }}
                             >
                               {profile.location}
@@ -343,7 +343,7 @@ const PetProfile = ({ navigation }) => {
                     <Icon name="heart-outline" size={22} color={COLORS.white} />
                   </View>
                   <View style={styles.btn}>
-                    <Text style={{ color: COLORS.white, fontWeight: "bold" }}>
+                    <Text style={{ color: COLORS.white, fontWeight: "bold" }}>                    
                       Adopt Me!
                     </Text>
                   </View>
