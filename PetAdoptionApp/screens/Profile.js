@@ -264,6 +264,7 @@ export default function Profile() {
                     style={{
                       width: 150,
                       height: 150,
+                      borderRadius: 100,
                       backgroundColor: "black",
                     }}
                   />
