@@ -41,7 +41,7 @@ export default function Profile() {
 
   useEffect(() => {
     fetchSession();
-}, []);
+  }, []);
 
   async function fetchSession() {
     try {
@@ -62,30 +62,29 @@ export default function Profile() {
       console.log(user);
 
       const { data: imageData, error: imageError } = await supabase
-      .from("profiles")
-      .select("avatar_url")
-      .eq("id", session.user.id);
+        .from("profiles")
+        .select("avatar_url")
+        .eq("id", session.user.id);
 
-    if (imageData && imageData.length > 0) {
-      const avatarUrlData = imageData[0].avatar_url;
-      console.log(avatarUrlData);
+      if (imageData && imageData.length > 0) {
+        const avatarUrlData = imageData[0].avatar_url;
+        console.log(avatarUrlData);
 
-      const { data, error } = await supabase.storage
-        .from("profilePhoto")
-        .download(session.user.id + `/` + avatarUrlData);
+        const { data, error } = await supabase.storage
+          .from("profilePhoto")
+          .download(session.user.id + `/` + avatarUrlData);
 
-      setLoading(false);
-      if (error) {
-        throw error;
+        setLoading(false);
+        if (error) {
+          throw error;
+        }
+
+        const fr = new FileReader();
+        fr.readAsDataURL(data);
+        fr.onload = () => {
+          setAvatarUrl(fr.result);
+        };
       }
-
-      const fr = new FileReader();
-      fr.readAsDataURL(data);
-      fr.onload = () => {
-        setAvatarUrl(fr.result);
-      };
-    }
-
     } catch (error) {
       console.log("Error fetching session:", error.message);
     }
@@ -219,67 +218,63 @@ export default function Profile() {
 
   return (
     <ScrollView>
-
       <View style={styles.container}>
-      <View style={{ marginVertical: 10 }} />
-      <Text style={styles.h1}>{username}'s Profile</Text>
-      {showCamera ? (
-        <Camera
-          style={stylesCamera.camera}
-          type={type}
-          ref={(ref) => {
-            setCamera(ref);
-          }}
-        >
-          <View style={stylesCamera.buttonContainer}>
-            <TouchableOpacity
-              style={stylesCamera.button}
-              onPress={toggleCameraType}
-            >
-              <MaterialCommunityIcons
-                name="camera-flip"
-                size={36}
-                color="black"
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={stylesCamera.button}
-              onPress={captureImage}
-            >
-              <MaterialCommunityIcons name="camera" size={36} color="black" />
-            </TouchableOpacity>
-          </View>
-        </Camera>
-      ) : (
-        <View style={{ flex: 1 }}>
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
+        <View style={{ marginVertical: 10 }} />
+        <Text style={styles.h1}>{username}'s Profile</Text>
+        {showCamera ? (
+          <Camera
+            style={stylesCamera.camera}
+            type={type}
+            ref={(ref) => {
+              setCamera(ref);
             }}
           >
-            <View style={{ width: "100%", alignItems: "center" }}>
-              <Pressable onPress={() => setShowCamera(true)}>
-                <Image
-                  source={avatarUrl ? { uri: avatarUrl } : defaultPic}
-                  style={{
-                    width: 150,
-                    height: 150,
-                    backgroundColor: "black",
-                  }}
+            <View style={stylesCamera.buttonContainer}>
+              <TouchableOpacity
+                style={stylesCamera.button}
+                onPress={toggleCameraType}
+              >
+                <MaterialCommunityIcons
+                  name="camera-flip"
+                  size={36}
+                  color="black"
                 />
-              </Pressable>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={stylesCamera.button}
+                onPress={captureImage}
+              >
+                <MaterialCommunityIcons name="camera" size={36} color="black" />
+              </TouchableOpacity>
+            </View>
+          </Camera>
+        ) : (
+          <View style={{ flex: 1 }}>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <View style={{ width: "100%", alignItems: "center" }}>
+                <Pressable onPress={() => setShowCamera(true)}>
+                  <Image
+                    source={avatarUrl ? { uri: avatarUrl } : defaultPic}
+                    style={{
+                      width: 150,
+                      height: 150,
+                      backgroundColor: "black",
+                    }}
+                  />
+                </Pressable>
+              </View>
             </View>
           </View>
-        </View>
-      )}
+        )}
 
         <View style={styles.profileDetailContainer}>
-          
-
           <View style={{ marginVertical: 10 }} />
-          
 
           <Text style={styles.inputLabel}>Full Name: </Text>
           <TextInput
@@ -289,11 +284,10 @@ export default function Profile() {
             onChangeText={setFullName}
             style={styles.input}
           />
-          
-      
+
           <Text style={styles.inputLabel}>Email: </Text>
           <TextInput value={email} editable={false} style={styles.input} />
-          
+
           <Text style={styles.inputLabel}>Phone Number:</Text>
           <TextInput
             value={phone}
@@ -304,84 +298,71 @@ export default function Profile() {
           />
 
           <Text style={styles.inputLabel}>Date Of Birth:</Text>
-          <TextInput value={dateOfBirth} editable={false} style={styles.input} />
-          
+          <TextInput
+            value={dateOfBirth}
+            editable={false}
+            style={styles.input}
+          />
+
           <View style={{ marginVertical: 10 }} />
 
-      {showPasswordInputs && (
-        <View>
-          <Text style={styles.inputLabel}>Change Password</Text>
-          <TextInput
-            placeholder="Enter new password"
-            value={newPassword}
-            onChangeText={setNewPassword}
-            secureTextEntry
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Confirm new password"
-            value={confirmNewPassword}
-            onChangeText={setConfirmNewPassword}
-            secureTextEntry
-            style={styles.input}
-          />
-        </View>
+          {showPasswordInputs && (
+            <View>
+              <Text style={styles.inputLabel}>Change Password</Text>
+              <TextInput
+                placeholder="Enter new password"
+                value={newPassword}
+                onChangeText={setNewPassword}
+                secureTextEntry
+                style={styles.input}
+              />
+              <TextInput
+                placeholder="Confirm new password"
+                value={confirmNewPassword}
+                onChangeText={setConfirmNewPassword}
+                secureTextEntry
+                style={styles.input}
+              />
+            </View>
           )}
-          
 
-      {changePasswordButtonVisible && (
-        <Button
-          title="Change Password"
-          onPress={handleChangePassword}
-          buttonStyle={{
-            backgroundColor: "#FFB197",
-            borderRadius: 50,
-            padding: 15,
-            height: 55,
-          }}
-          containerStyle={{
-            width: 200,
-            justifyContent: "center",
-            marginHorizontal: 90,
-          }}
-        />
-      )}
-      <View style={{ marginVertical: 10 }} />
-      <Button
-        title="Update"
-        onPress={handleUpdateUser}
-        buttonStyle={{
-          backgroundColor: "#FFB197",
-          borderRadius: 50,
-          padding: 15,
-          height: 55,
-        }}
-        containerStyle={{
-          width: 200,
-          justifyContent: "center",
-          marginHorizontal: 90,
-          marginVertical: 10,
-        }}
-      />
-      <View style={{ marginVertical: 10 }} />
-      <Button
-        title="Logout"
-        onPress={handleLogout}
-        buttonStyle={{
-          backgroundColor: "#FFB197",
-          borderRadius: 50,
-          padding: 15,
-          height: 55,
-        }}
-        containerStyle={{
-          width: 200,
-          justifyContent: "center",
-          marginHorizontal: 90,
-          marginVertical: 10,
-        }}
+          {changePasswordButtonVisible && (
+            <Button
+              title="Change Password"
+              onPress={handleChangePassword}
+              buttonStyle={{
+                backgroundColor: "#FFB197",
+                borderRadius: 50,
+                padding: 15,
+                height: 55,
+              }}
+              containerStyle={{
+                width: 200,
+                justifyContent: "center",
+                marginHorizontal: 90,
+              }}
+            />
+          )}
+          <View style={{ marginVertical: 10 }} />
+          <Button
+            title="Update"
+            onPress={handleUpdateUser}
+            buttonStyle={{
+              backgroundColor: "#FFB197",
+              borderRadius: 50,
+              padding: 15,
+              height: 55,
+            }}
+            containerStyle={{
+              width: 200,
+              justifyContent: "center",
+              marginHorizontal: 90,
+              marginVertical: 10,
+            }}
           />
-          </View>
-          </View>
+          <View style={{ marginVertical: 10 }} />
+        </View>
+      </View>
     </ScrollView>
   );
 }
