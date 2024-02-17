@@ -15,7 +15,8 @@ import {
   ScrollView,
   TextInput,
 } from "react-native";
-import CameraTest from "../components/CameraTest.js";
+import defaultPic from "../assets/images/profileIcon.jpg";
+import * as ImageManipulator from "expo-image-manipulator";
 
 export default function Profile() {
   const [loading, setLoading] = useState(true);
@@ -28,14 +29,13 @@ export default function Profile() {
   const [newPassword, setNewPassword] = useState(null);
   const [confirmNewPassword, setConfirmNewPassword] = useState(null);
   const [showPasswordInputs, setShowPasswordInputs] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState(null);
   const [changePasswordButtonVisible, setChangePasswordButtonVisible] =
     useState(true);
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [camera, setCamera] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
-  const [image, setImage] = useState(null);
 
   const navigation = useNavigation();
 
@@ -43,70 +43,56 @@ export default function Profile() {
     fetchSession();
   }, []);
 
-  useEffect(() => {
-    if (session) getProfile();
-  }, [session]);
-
   async function fetchSession() {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    setSession(session);
-    setUsername(user.user_metadata.username);
-    setEmail(user.email);
-    setFullName(user.user_metadata.fullName);
-    setDateOfBirth(user.user_metadata.dateOfBirth);
-    setPhone(user.phone);
-    // console.log(user);
-  }
-
-  async function getProfile() {
     try {
-      setLoading(true);
-      if (!session) {
-        console.error("No active session");
-        return;
-      }
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
-      const { data, error, status } = await supabase
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      setSession(session);
+      setUsername(user.user_metadata.username);
+      setEmail(user.email);
+      setFullName(user.user_metadata.fullName);
+      setDateOfBirth(user.user_metadata.dateOfBirth);
+      setPhone(user.phone);
+      console.log(user);
+
+      const { data: imageData, error: imageError } = await supabase
         .from("profiles")
-        .select(`avatar_url`)
-        .eq("id", session.user.id)
-        .single();
+        .select("avatar_url")
+        .eq("id", session.user.id);
 
-      if (error) {
-        throw error;
-      }
+      if (imageData && imageData.length > 0) {
+        const avatarUrlData = imageData[0].avatar_url;
+        console.log(avatarUrlData);
 
-      if (data) {
-        setAvatarUrl(data.avatar_url);
-        console.log(data.avatar_url);
+        const { data, error } = await supabase.storage
+          .from("profilePhoto")
+          .download(session.user.id + `/` + avatarUrlData);
+
+        setLoading(false);
+        if (error) {
+          throw error;
+        }
+
+        const fr = new FileReader();
+        fr.readAsDataURL(data);
+        fr.onload = () => {
+          setAvatarUrl(fr.result);
+        };
       }
     } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function handleLogout() {
-    const { error } = await supabase.auth.signOut();
-    if (!error) {
-      navigation.navigate("BlankPage");
-    }
-    if (error) {
-      alert(error.message);
+      console.log("Error fetching session:", error.message);
     }
   }
 
   async function handleUpdateUser() {
     if (!session) {
-      console.error("No active session");
+      console.log("No active session");
       return;
     }
 
@@ -149,19 +135,22 @@ export default function Profile() {
         <Text style={{ textAlign: "center", paddingBottom: 20 }}>
           We need your permission to show the camera
         </Text>
-        <Button buttonStyle={{
-          backgroundColor: "#FFB197",
-          borderRadius: 50,
-          padding: 15,
-          height: 55,
-        }}
-        containerStyle={{
-          width: 200,
-          justifyContent: "center",
-          marginHorizontal: 90,
-          marginVertical: 10,
+        <Button
+          buttonStyle={{
+            backgroundColor: "#FFB197",
+            borderRadius: 50,
+            padding: 15,
+            height: 55,
           }}
-          onPress={requestPermission} title="Grant Permission" />
+          containerStyle={{
+            width: 200,
+            justifyContent: "center",
+            marginHorizontal: 90,
+            marginVertical: 10,
+          }}
+          onPress={requestPermission}
+          title="Grant Permission"
+        />
       </View>
     );
   }
@@ -176,8 +165,19 @@ export default function Profile() {
     if (permission.granted) {
       const photo = await camera.takePictureAsync({ base64: true });
       setShowCamera(false);
-      setImage(photo);
-      uploadImage(photo.uri);
+      compressImage(photo.uri);
+    }
+  };
+
+  const compressImage = async (uri) => {
+    try {
+      const compressedImage = await ImageManipulator.manipulateAsync(uri, [], {
+        compress: 0.3,
+        format: ImageManipulator.SaveFormat.JPEG,
+      });
+      uploadImage(compressedImage.uri);
+    } catch (error) {
+      console.log("Error compressing image: ", error);
     }
   };
 
@@ -185,166 +185,185 @@ export default function Profile() {
     const response = await fetch(uri);
     const blob = await response.blob();
     const arrayBuffer = await new Response(blob).arrayBuffer();
-    const fileName = session.user.id+`/${Date.now()}.jpg`;
-    const { error } = await supabase.storage
+    const fileName = session.user.user_metadata.username + "_profilePic.jpg";
+    const filePath = session.user.id + `/` + fileName;
+
+    // Upload image to supabase storage
+    const { data, error } = await supabase.storage
       .from("profilePhoto")
-      .upload(fileName, arrayBuffer, {
+      .upload(filePath, arrayBuffer, {
         contentType: "image/jpeg",
-        upsert: false,
+        upsert: true,
       });
     if (error) {
-      console.error("Error uploading image: ", error);
+      console.log("Error uploading image: ", error);
+      return;
     }
-    console.log("ArrayBuffer: " + arrayBuffer.byteLength);
+    console.log("Image uploaded successfully");
+
+    // Update avatar URL in the profiles table
+    const { data: dataImage, error: errorImage } = await supabase
+      .from("profiles")
+      .upsert({ id: session.user.id, avatar_url: fileName });
+
+    if (errorImage) {
+      console.log("Error updating profile image: ", errorImage);
+      return;
+    }
+
+    setAvatarUrl(uri);
+
+    alert("Profile image updated successfully");
   };
 
   return (
     <ScrollView>
-      <View style={{ marginVertical: 10 }} />
-      <Text style={styles.h1}>{username} Profile</Text>
-      {showCamera ? (
-        <Camera
-          style={stylesCamera.camera}
-          type={type}
-          ref={(ref) => {
-            setCamera(ref);
-          }}
-        >
-          <View style={stylesCamera.buttonContainer}>
-            <TouchableOpacity style={stylesCamera.button} onPress={toggleCameraType}>
-              <MaterialCommunityIcons
-                name="camera-flip"
-                size={36}
-                color="black"
-              />
-            </TouchableOpacity>
-            <TouchableOpacity style={stylesCamera.button} onPress={captureImage}>
-              <MaterialCommunityIcons name="camera" size={36} color="black" />
-            </TouchableOpacity>
-          </View>
-        </Camera>
-      ) : (
-        <View style={{ flex: 1 }}>
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
+      <View style={styles.container}>
+        <View style={{ marginVertical: 10 }} />
+        <Text style={styles.h1}>{username}'s Profile</Text>
+        {showCamera ? (
+          <Camera
+            style={stylesCamera.camera}
+            type={type}
+            ref={(ref) => {
+              setCamera(ref);
             }}
           >
-            <View style={{ width: "100%", alignItems: "center" }}>
-              {true && (
+            <View style={stylesCamera.buttonContainer}>
+              <TouchableOpacity
+                style={stylesCamera.button}
+                onPress={toggleCameraType}
+              >
+                <MaterialCommunityIcons
+                  name="camera-flip"
+                  size={36}
+                  color="black"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={stylesCamera.button}
+                onPress={captureImage}
+              >
+                <MaterialCommunityIcons name="camera" size={36} color="black" />
+              </TouchableOpacity>
+            </View>
+          </Camera>
+        ) : (
+          <View style={{ flex: 1 }}>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <View style={{ width: "100%", alignItems: "center" }}>
                 <Pressable onPress={() => setShowCamera(true)}>
                   <Image
-                    source={image}
+                    source={avatarUrl ? { uri: avatarUrl } : defaultPic}
                     style={{
                       width: 150,
                       height: 150,
+                      borderRadius: 100,
                       backgroundColor: "black",
                     }}
                   />
                 </Pressable>
-              )}
+              </View>
             </View>
           </View>
-        </View>
-      )}
-      <View style={{ marginVertical: 10 }} />
-      <Text>Full Name</Text>
-      <TextInput
-        value={fullName}
-        autoComplete="off"
-        autoCorrect={false}
-        onChangeText={setFullName}
-        style={styles.input}
-      />
-      <View style={{ marginVertical: 10 }} />
-      <Text>Email</Text>
-      <TextInput value={email} editable={false} style={styles.input} />
-      <View style={{ marginVertical: 10 }} />
-      <Text>Phone</Text>
-      <TextInput
-        value={phone}
-        autoComplete="off"
-        autoCorrect={false}
-        onChangeText={setPhone}
-        style={styles.input}
-      />
-      <View style={{ marginVertical: 10 }} />
-      <Text>Date Of Birth</Text>
-      <TextInput value={dateOfBirth} editable={false} style={styles.input} />
-      <View style={{ marginVertical: 10 }} />
-      {showPasswordInputs && (
-        <View>
-          <Text>Change Password</Text>
+        )}
+
+        <View style={styles.profileDetailContainer}>
+          <View style={{ marginVertical: 10 }} />
+
+          <Text style={styles.inputLabel}>Full Name: </Text>
           <TextInput
-            placeholder="Enter new password"
-            value={newPassword}
-            onChangeText={setNewPassword}
-            secureTextEntry
+            value={fullName}
+            autoComplete="off"
+            autoCorrect={false}
+            onChangeText={setFullName}
             style={styles.input}
           />
+
+          <Text style={styles.inputLabel}>Email: </Text>
+          <TextInput value={email} editable={false} style={styles.input} />
+
+          <Text style={styles.inputLabel}>Phone Number:</Text>
           <TextInput
-            placeholder="Confirm new password"
-            value={confirmNewPassword}
-            onChangeText={setConfirmNewPassword}
-            secureTextEntry
+            value={phone}
+            autoComplete="off"
+            autoCorrect={false}
+            onChangeText={setPhone}
             style={styles.input}
           />
+
+          <Text style={styles.inputLabel}>Date Of Birth:</Text>
+          <TextInput
+            value={dateOfBirth}
+            editable={false}
+            style={styles.input}
+          />
+
+          <View style={{ marginVertical: 10 }} />
+
+          {showPasswordInputs && (
+            <View>
+              <Text style={styles.inputLabel}>Change Password</Text>
+              <TextInput
+                placeholder="Enter new password"
+                value={newPassword}
+                onChangeText={setNewPassword}
+                secureTextEntry
+                style={styles.input}
+              />
+              <TextInput
+                placeholder="Confirm new password"
+                value={confirmNewPassword}
+                onChangeText={setConfirmNewPassword}
+                secureTextEntry
+                style={styles.input}
+              />
+            </View>
+          )}
+
+          {changePasswordButtonVisible && (
+            <Button
+              title="Change Password"
+              onPress={handleChangePassword}
+              buttonStyle={{
+                backgroundColor: "#FFB197",
+                borderRadius: 50,
+                padding: 15,
+                height: 55,
+              }}
+              containerStyle={{
+                width: 200,
+                justifyContent: "center",
+                marginHorizontal: 90,
+              }}
+            />
+          )}
+          <View style={{ marginVertical: 10 }} />
+          <Button
+            title="Update"
+            onPress={handleUpdateUser}
+            buttonStyle={{
+              backgroundColor: "#FFB197",
+              borderRadius: 50,
+              padding: 15,
+              height: 55,
+            }}
+            containerStyle={{
+              width: 200,
+              justifyContent: "center",
+              marginHorizontal: 90,
+              marginVertical: 10,
+            }}
+          />
+          <View style={{ marginVertical: 10 }} />
         </View>
-      )}
-      {changePasswordButtonVisible && (
-        <Button
-          title="Change Password"
-          onPress={handleChangePassword}
-          buttonStyle={{
-            backgroundColor: "#FFB197",
-            borderRadius: 50,
-            padding: 15,
-            height: 55,
-          }}
-          containerStyle={{
-            width: 200,
-            justifyContent: "center",
-            marginHorizontal: 90,
-            marginVertical: 10,
-          }}
-        />
-      )}
-      <View style={{ marginVertical: 10 }} />
-      <Button
-        title="Update"
-        onPress={handleUpdateUser}
-        buttonStyle={{
-          backgroundColor: "#FFB197",
-          borderRadius: 50,
-          padding: 15,
-          height: 55,
-        }}
-        containerStyle={{
-          width: 200,
-          justifyContent: "center",
-          marginHorizontal: 90,
-          marginVertical: 10,
-        }}
-      />
-      <View style={{ marginVertical: 10 }} />
-      <Button
-        title="Logout"
-        onPress={handleLogout}
-        buttonStyle={{
-          backgroundColor: "#FFB197",
-          borderRadius: 50,
-          padding: 15,
-          height: 55,
-        }}
-        containerStyle={{
-          width: 200,
-          justifyContent: "center",
-          marginHorizontal: 90,
-          marginVertical: 10,
-        }}
-      />
+      </View>
     </ScrollView>
   );
 }
