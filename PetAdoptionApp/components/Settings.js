@@ -5,6 +5,7 @@ import { supabase } from "../lib/supabase";
 import { useNavigation } from "@react-navigation/native";
 import { styles } from "../assets/styles/index.js";
 
+
 export default function Settings() {
   const [session, setSession] = useState(null);
 
