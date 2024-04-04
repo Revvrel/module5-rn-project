@@ -16,7 +16,6 @@ import Settings from "./components/Settings";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import WelcomeScreen from "./components/WelcomeScreen";
 import BlankPage from "./components/BlankPage";
-import CameraTest from "./components/CameraTest";
 import * as Font from 'expo-font';
 
 const Stack = createStackNavigator();

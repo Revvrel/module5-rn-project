@@ -4,7 +4,6 @@ import React from "react";
 import { Matches, Messages, Profile, SwipeHome } from "../screens";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Help from "./Help";
-import CameraTest from "./CameraTest";
 import { useNavigation } from "@react-navigation/native";
 
 const Stack = createStackNavigator();

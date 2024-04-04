@@ -54,7 +54,7 @@ export default function App() {
     const fileName = `public/${Date.now()}.jpg`;
 
     const { error } = await supabase.storage
-      .from("pet_info")
+      .from("petPhotos")
       .upload(fileName, arrayBuffer, {
         contentType: "image/jpeg",
         upsert: false,

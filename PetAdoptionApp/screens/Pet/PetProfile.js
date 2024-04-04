@@ -7,7 +7,7 @@ import {
   View,
   Image,
   StyleSheet,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import { useEffect, useState } from "react";
 
@@ -47,12 +47,11 @@ const PetProfile = ({ navigation }) => {
   }, []);
 
   return (
-
     <NavigationContainer independent={true}>
       <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
         <StatusBar backgroundColor={COLORS.background} />
 
-        <ScrollView style={{flex: 1}}>
+        <ScrollView style={{ flex: 1 }}>
           {fetchError && <Text>{fetchError}</Text>}
 
           <ImageBackground
@@ -60,129 +59,111 @@ const PetProfile = ({ navigation }) => {
             source={require("../../assets/images/choosePet1.jpg")} // Add your image source here
             style={{
               height: 650,
-              width: '100%',
+              width: "100%",
               top: 0,
               left: 0,
               right: 0,
-              position:'absolute',
-              resizeMode: 'cover',
+              position: "absolute",
+              resizeMode: "cover",
               // zIndex: -99,
-              flex: 1
+              flex: 1,
             }}
+          >
+            <View
+              style={{
+                flexDirection: "column",
+                height: "90%",
+                justifyContent: "space-between",
+                paddingHorizontal: 20,
+              }}
             >
-
-
-
-          <View style={{flexDirection:'column', height: '90%', justifyContent:'space-between', paddingHorizontal: 20,}}>
-
-            {/* Top Buttons */}
-            <View style={styles.topButtons}>
-              <Icon
-                name="arrow-left"
-                size={28}
-                color={"white"}
-                onPress={navigation.goBack}
-              />
-              <Icon name="dots-vertical" size={28} color={"white"} />
-            </View>
-              
-
+              {/* Top Buttons */}
+              <View style={styles.topButtons}>
+                <Icon
+                  name="arrow-left"
+                  size={28}
+                  color={"white"}
+                  onPress={navigation.goBack}
+                />
+                <Icon name="dots-vertical" size={28} color={"white"} />
+              </View>
 
               {petProfiles && (
-              <View>
-                {petProfiles.map((profile) => (
-                  <View
-                    key={profile.id}
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
-
-                    {/* Pet Name */}
-                    <View style={{flexDirection: "row"}}>
-                      <Text
+                <View>
+                  {petProfiles.map((profile) => (
+                    <View
+                      key={profile.id}
                       style={{
-                        fontSize: 24,
-                        color: '#7D5224',
-                        fontWeight: 'bold',                  
-                      }}                  
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                      }}
                     >
-                      {profile.name}
-                      </Text>
-                      
-                      {/* Pet Gender */}
-                    <Icon
-                        name={
-                          profile.gender == "male"
-                            ? "gender-male"
-                            : "gender-female"
-                        }
-                        size={23}
-                        color={COLORS.primary}
-                      />
-                      {/* <Text style={{ fontSize: 12, color: '#B6A6A1' }}>
+                      {/* Pet Name */}
+                      <View style={{ flexDirection: "row" }}>
+                        <Text
+                          style={{
+                            fontSize: 24,
+                            color: "#7D5224",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {profile.name}
+                        </Text>
+
+                        {/* Pet Gender */}
+                        <Icon
+                          name={
+                            profile.gender == "male"
+                              ? "gender-male"
+                              : "gender-female"
+                          }
+                          size={23}
+                          color={COLORS.primary}
+                        />
+                        {/* <Text style={{ fontSize: 12, color: '#B6A6A1' }}>
                         {profile.gender == "male" ? "Male" : "Female"}
                       </Text> */}
-
+                      </View>
                     </View>
-
-
-                    
-                    
-
-                    
-                    
-                  </View>
-                ))}
-                  
-
+                  ))}
 
                   {petProfiles && (
-                      <View style={styles.locationInfo}>
-                        {petProfiles.map((profile) => (
-                          <View
-                            key={profile.id}
+                    <View style={styles.locationInfo}>
+                      {petProfiles.map((profile) => (
+                        <View
+                          key={profile.id}
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            marginTop: 5,
+                          }}
+                        >
+                          <Icon
+                            name="map-marker"
+                            color={COLORS.primary}
+                            size={20}
+                          />
+                          <Text
                             style={{
-                              flexDirection: "row",
-                              justifyContent: "space-between",
-                              marginTop: 5,
+                              fontSize: 14,
+                              color: "#7D5224",
+                              marginLeft: 5,
                             }}
                           >
-                            <Icon
-                              name="map-marker"
-                              color={COLORS.primary}
-                              size={20}
-                            />
-                            <Text
-                              style={{
-                                fontSize: 14,
-                                color: '#7D5224',
-                                marginLeft: 5,                                
-                              }}
-                            >
-                              {profile.location}
-                            </Text>
-
-                            
-                          </View>
-                        ))}
-                      </View>
-                    )}
-              </View>
+                            {profile.location}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                  )}
+                </View>
               )}
-
             </View>
-              
-
           </ImageBackground>
 
           {/* Pet Profile Card */}
-          <View style={[styles.detailsContainer, {paddingHorizontal: 30}]}>
-          
-              
-
-              {/* <View >
+          <View style={[styles.detailsContainer, { paddingHorizontal: 30 }]}>
+            {/* <View >
 
                     <Icon name="map-marker" color={COLORS.primary} size={20} />
                     
@@ -192,13 +173,10 @@ const PetProfile = ({ navigation }) => {
 
                     
               </View> */}
-              
 
-              
             {petProfiles && (
               <View>
                 {petProfiles.map((profile) => (
-                  
                   <View
                     key={profile.id}
                     style={{
@@ -207,70 +185,45 @@ const PetProfile = ({ navigation }) => {
                       marginTop: 5,
                     }}
                   >
-
-
-
-              <View style={styles.petDetailContainer}>
-                      
-
-                  <View style={styles.petDetailBox}>
-                    {/* Pet Color */}
-                      <Text style={styles.petDetail}>
-                        {profile.breed}
-                          {'\n'}
-                          <Text style={styles.petDetailLabel}>
-                          Breed
-                          </Text>
-                      </Text>
+                    <View style={styles.petDetailContainer}>
+                      <View style={styles.petDetailBox}>
+                        {/* Pet Color */}
+                        <Text style={styles.petDetail}>
+                          {profile.breed}
+                          {"\n"}
+                          <Text style={styles.petDetailLabel}>Breed</Text>
+                        </Text>
                       </View>
-                      
 
-                  <View style={styles.petDetailBox}>
-                    {/* Pet Color */}
-                      <Text style={styles.petDetail}>
-                        {profile.color}
-                          {'\n'}
-                          <Text style={styles.petDetailLabel}>
-                          Color
-                          </Text>
-                      </Text>
+                      <View style={styles.petDetailBox}>
+                        {/* Pet Color */}
+                        <Text style={styles.petDetail}>
+                          {profile.color}
+                          {"\n"}
+                          <Text style={styles.petDetailLabel}>Color</Text>
+                        </Text>
                       </View>
-                      
 
-                  <View style={styles.petDetailBox}>
-                    {/* Pet Color */}
-                      <Text style={styles.petDetail}>
-                        {profile.weight} kg
-                          {'\n'}
-                          <Text style={styles.petDetailLabel}>
-                          Weight
-                          </Text>
-                      </Text>
+                      <View style={styles.petDetailBox}>
+                        {/* Pet Color */}
+                        <Text style={styles.petDetail}>
+                          {profile.weight} kg
+                          {"\n"}
+                          <Text style={styles.petDetailLabel}>Weight</Text>
+                        </Text>
                       </View>
-                      
 
-                  <View style={styles.petDetailBox}>
-                    {/* Pet Color */}
-                      <Text style={styles.petDetail}>
-                        {profile.age} years old
-                          {'\n'}
-                          <Text style={styles.petDetailLabel}>
-                          Age
-                          </Text>
-                      </Text>
-                  </View>
+                      <View style={styles.petDetailBox}>
+                        {/* Pet Color */}
+                        <Text style={styles.petDetail}>
+                          {profile.age} years old
+                          {"\n"}
+                          <Text style={styles.petDetailLabel}>Age</Text>
+                        </Text>
+                      </View>
+                    </View>
 
-                   
-                      
-                    
-
-                </View>
-                    
-
-                    
-
-
-                      {/* Adoption Cost */}
+                    {/* Adoption Cost */}
                     {/* <Text
                       style={{
                         fontSize: 15,
@@ -279,87 +232,67 @@ const PetProfile = ({ navigation }) => {
                     >
                       ${profile.price}                      
                     </Text> */}
-                      
-
-                    
                   </View>
                 ))}
               </View>
-              )}
-              
-              
+            )}
 
+            <View style={styles.infoContainer}>
+              {/* Comment container */}
 
-              <View style={styles.infoContainer}>
-                
+              {/* Render user image , name and date */}
+              <View style={styles.ownerContainer}>
+                <Image
+                  source={require("../../assets/images/potts.jpg")}
+                  style={styles.ownerImg}
+                />
 
-                 {/* Comment container */}
-        
-                    {/* Render user image , name and date */}
-                  <View style={styles.ownerContainer}>
-                      <Image
-                        source={require("../../assets/images/potts.jpg")}
-                        style={styles.ownerImg}
-                      />
-                      
-                    <View style={styles.ownerInfoBox}>   
-                      
-                      <Text style={styles.ownerLabel}>
-                          Owner
-                      </Text>
-                      
-                      <Text style={styles.ownerName} >
-                        Pepper Potts
-                      </Text>
-                        
-                    </View>
-                    
+                <View style={styles.ownerInfoBox}>
+                  <Text style={styles.ownerLabel}>Owner</Text>
 
-                    <Text style={{ color: COLORS.grey, fontSize: 12 }}>
-                        Feb 11, 2024
-                    </Text>
-                    
+                  <Text style={styles.ownerName}>Pepper Potts</Text>
+                </View>
 
-                  </View>
-                  
-
-
-                  <Text style={styles.ownerComment}>
-                  Meet Samantha, a charming and affectionate feline looking for her forever home! Samantha is a spayed and vaccinated cat who has been a cherished member of our family for years.
-                  {'\n'}{'\n'}
-                      
-                  Due to personal circumstances, we're sadly unable to provide her with the attention and care she deserves. Samantha is a gentle soul who loves curling up in sunny spots and enjoys the occasional play session with her favorite toys. She's litter-trained and has a clean bill of health.
-                  {'\n'}{'\n'}
-                  
-                  We believe she would thrive in a calm and loving environment where she can receive plenty of affection and attention. If you're ready to open your heart and home to a wonderful companion, Samantha would love to meet you!
+                <Text style={{ color: COLORS.grey, fontSize: 12 }}>
+                  Feb 11, 2024
                 </Text>
-                
-                </View>
+              </View>
 
+              <Text style={styles.ownerComment}>
+                Meet Samantha, a charming and affectionate feline looking for
+                her forever home! Samantha is a spayed and vaccinated cat who
+                has been a cherished member of our family for years.
+                {"\n"}
+                {"\n"}
+                Due to personal circumstances, we're sadly unable to provide her
+                with the attention and care she deserves. Samantha is a gentle
+                soul who loves curling up in sunny spots and enjoys the
+                occasional play session with her favorite toys. She's
+                litter-trained and has a clean bill of health.
+                {"\n"}
+                {"\n"}
+                We believe she would thrive in a calm and loving environment
+                where she can receive plenty of affection and attention. If
+                you're ready to open your heart and home to a wonderful
+                companion, Samantha would love to meet you!
+              </Text>
+            </View>
 
-              {/* Render footer */}
-                <View style={styles.footer}>
-                  <View style={styles.iconCon}>
-                    <Icon name="heart-outline" size={22} color={COLORS.white} />
-                  </View>
-                  <View style={styles.btn}>
-                    <Text style={{ color: COLORS.white, fontWeight: "bold" }}>                    
-                      Adopt Me!
-                    </Text>
-                  </View>
-                </View>
-
-
-              
-
-
-        </View>
-
+            {/* Render footer */}
+            <View style={styles.footer}>
+              <View style={styles.iconCon}>
+                <Icon name="heart-outline" size={22} color={COLORS.white} />
+              </View>
+              <View style={styles.btn}>
+                <Text style={{ color: COLORS.white, fontWeight: "bold" }}>
+                  Adopt Me!
+                </Text>
+              </View>
+            </View>
+          </View>
         </ScrollView>
-
-
       </SafeAreaView>
-      </NavigationContainer>
+    </NavigationContainer>
   );
 };
 

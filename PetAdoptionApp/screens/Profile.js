@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@rneui/themed";
+// import supabase from "../config/supabaseClient.js"
 import { supabase } from "../lib/supabase";
 import { useNavigation } from "@react-navigation/native";
 import { styles } from "../assets/styles/index.js";
@@ -17,6 +18,8 @@ import {
 } from "react-native";
 import defaultPic from "../assets/images/profileIcon.jpg";
 import * as ImageManipulator from "expo-image-manipulator";
+import PetInfo from "./Pet/PetInfo.js";
+import PetProfile from "./Pet/PetProfile.js";
 
 export default function Profile() {
   const [loading, setLoading] = useState(true);
@@ -36,6 +39,7 @@ export default function Profile() {
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [camera, setCamera] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
+  const [isPetProfile, setIsPetProfile] = useState(false);
 
   const navigation = useNavigation();
 
@@ -123,6 +127,10 @@ export default function Profile() {
     setChangePasswordButtonVisible(false);
   };
 
+  const toggleProfile = () => {
+    setIsPetProfile((prev) => !prev);
+  };
+
   // ALL THE FUNCTIONS FOR CAMERA AND STORING OF IMAGE TO SUPABASE
 
   if (!permission) {
@@ -204,7 +212,8 @@ export default function Profile() {
     // Update avatar URL in the profiles table
     const { data: dataImage, error: errorImage } = await supabase
       .from("profiles")
-      .upsert({ id: session.user.id, avatar_url: fileName });
+      .upsert({ id: session.user.id, avatar_url: fileName })
+      .eq("id", session.user.id);
 
     if (errorImage) {
       console.log("Error updating profile image: ", errorImage);
@@ -219,150 +228,193 @@ export default function Profile() {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <View style={{ marginVertical: 10 }} />
-        <Text style={styles.h1}>{username}'s Profile</Text>
-        {showCamera ? (
-          <Camera
-            style={stylesCamera.camera}
-            type={type}
-            ref={(ref) => {
-              setCamera(ref);
+        {!showCamera && (
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              marginBottom: 1,
             }}
           >
-            <View style={stylesCamera.buttonContainer}>
-              <TouchableOpacity
-                style={stylesCamera.button}
-                onPress={toggleCameraType}
-              >
-                <MaterialCommunityIcons
-                  name="camera-flip"
-                  size={36}
-                  color="black"
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={stylesCamera.button}
-                onPress={captureImage}
-              >
-                <MaterialCommunityIcons name="camera" size={36} color="black" />
-              </TouchableOpacity>
-            </View>
-          </Camera>
-        ) : (
-          <View style={{ flex: 1 }}>
-            <View
+            <Text
               style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
+                paddingHorizontal: 10,
+                textDecorationLine: isPetProfile ? "none" : "underline",
+                fontWeight: isPetProfile ? "normal" : "bold",
+                color: isPetProfile ? "black" : "blue",
               }}
+              onPress={() => setIsPetProfile(false)}
             >
-              <View style={{ width: "100%", alignItems: "center" }}>
-                <Pressable onPress={() => setShowCamera(true)}>
-                  <Image
-                    source={avatarUrl ? { uri: avatarUrl } : defaultPic}
-                    style={{
-                      width: 150,
-                      height: 150,
-                      borderRadius: 100,
-                      backgroundColor: "black",
-                    }}
-                  />
-                </Pressable>
+              Personal
+            </Text>
+            <Text
+              style={{
+                paddingHorizontal: 10,
+                textDecorationLine: !isPetProfile ? "none" : "underline",
+                fontWeight: !isPetProfile ? "normal" : "bold",
+                color: !isPetProfile ? "black" : "blue",
+              }}
+              onPress={() => setIsPetProfile(true)}
+            >
+              Pet
+            </Text>
+          </View>
+        )}
+        <View style={{ marginVertical: 10 }} />
+        {isPetProfile ? (
+          <PetInfo />
+        ) : (
+          <View>
+            <Text style={styles.h1}>{username}'s Profile</Text>
+            {showCamera ? (
+                <Camera
+                  style={stylesCamera.camera}
+                  type={type}
+                  ref={(ref) => {
+                    setCamera(ref);
+                  }}
+                >
+                  <View style={stylesCamera.buttonContainer}>
+                    <TouchableOpacity
+                      style={stylesCamera.button}
+                      onPress={toggleCameraType}
+                    >
+                      <MaterialCommunityIcons
+                        name="camera-flip"
+                        size={36}
+                        color="black"
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={stylesCamera.button}
+                      onPress={captureImage}
+                    >
+                      <MaterialCommunityIcons
+                        name="camera"
+                        size={36}
+                        color="black"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </Camera>
+            ) : (
+              <View style={{ flex: 1 }}>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <View style={{ width: "100%", alignItems: "center" }}>
+                    <Pressable onPress={() => setShowCamera(true)}>
+                      <Image
+                        source={avatarUrl ? { uri: avatarUrl } : defaultPic}
+                        style={{
+                          width: 150,
+                          height: 150,
+                          borderRadius: 100,
+                          backgroundColor: "black",
+                        }}
+                      />
+                    </Pressable>
+                  </View>
+                </View>
               </View>
+            )}
+
+            <View style={styles.profileDetailContainer}>
+              <View style={{ marginVertical: 10 }} />
+
+              <Text style={styles.inputLabel}>Full Name: </Text>
+              <TextInput
+                value={fullName}
+                autoComplete="off"
+                autoCorrect={false}
+                onChangeText={setFullName}
+                style={styles.input}
+              />
+
+              <Text style={styles.inputLabel}>Email: </Text>
+              <TextInput value={email} editable={false} style={styles.input} />
+
+              <Text style={styles.inputLabel}>Phone Number:</Text>
+              <TextInput
+                value={phone}
+                autoComplete="off"
+                autoCorrect={false}
+                onChangeText={setPhone}
+                style={styles.input}
+              />
+
+              <Text style={styles.inputLabel}>Date Of Birth:</Text>
+              <TextInput
+                value={dateOfBirth}
+                editable={false}
+                style={styles.input}
+              />
+
+              <View style={{ marginVertical: 10 }} />
+
+              {showPasswordInputs && (
+                <View>
+                  <Text style={styles.inputLabel}>Change Password</Text>
+                  <TextInput
+                    placeholder="Enter new password"
+                    value={newPassword}
+                    onChangeText={setNewPassword}
+                    secureTextEntry
+                    style={styles.input}
+                  />
+                  <TextInput
+                    placeholder="Confirm new password"
+                    value={confirmNewPassword}
+                    onChangeText={setConfirmNewPassword}
+                    secureTextEntry
+                    style={styles.input}
+                  />
+                </View>
+              )}
+
+              {changePasswordButtonVisible && (
+                <Button
+                  title="Change Password"
+                  onPress={handleChangePassword}
+                  buttonStyle={{
+                    backgroundColor: "#FFB197",
+                    borderRadius: 50,
+                    padding: 15,
+                    height: 55,
+                  }}
+                  containerStyle={{
+                    width: 200,
+                    justifyContent: "center",
+                    marginHorizontal: 90,
+                  }}
+                />
+              )}
+              <View style={{ marginVertical: 10 }} />
+              <Button
+                title="Update"
+                onPress={handleUpdateUser}
+                buttonStyle={{
+                  backgroundColor: "#FFB197",
+                  borderRadius: 50,
+                  padding: 15,
+                  height: 55,
+                }}
+                containerStyle={{
+                  width: 200,
+                  justifyContent: "center",
+                  marginHorizontal: 90,
+                  marginVertical: 10,
+                }}
+              />
+              <View style={{ marginVertical: 10 }} />
             </View>
           </View>
         )}
-
-        <View style={styles.profileDetailContainer}>
-          <View style={{ marginVertical: 10 }} />
-
-          <Text style={styles.inputLabel}>Full Name: </Text>
-          <TextInput
-            value={fullName}
-            autoComplete="off"
-            autoCorrect={false}
-            onChangeText={setFullName}
-            style={styles.input}
-          />
-
-          <Text style={styles.inputLabel}>Email: </Text>
-          <TextInput value={email} editable={false} style={styles.input} />
-
-          <Text style={styles.inputLabel}>Phone Number:</Text>
-          <TextInput
-            value={phone}
-            autoComplete="off"
-            autoCorrect={false}
-            onChangeText={setPhone}
-            style={styles.input}
-          />
-
-          <Text style={styles.inputLabel}>Date Of Birth:</Text>
-          <TextInput
-            value={dateOfBirth}
-            editable={false}
-            style={styles.input}
-          />
-
-          <View style={{ marginVertical: 10 }} />
-
-          {showPasswordInputs && (
-            <View>
-              <Text style={styles.inputLabel}>Change Password</Text>
-              <TextInput
-                placeholder="Enter new password"
-                value={newPassword}
-                onChangeText={setNewPassword}
-                secureTextEntry
-                style={styles.input}
-              />
-              <TextInput
-                placeholder="Confirm new password"
-                value={confirmNewPassword}
-                onChangeText={setConfirmNewPassword}
-                secureTextEntry
-                style={styles.input}
-              />
-            </View>
-          )}
-
-          {changePasswordButtonVisible && (
-            <Button
-              title="Change Password"
-              onPress={handleChangePassword}
-              buttonStyle={{
-                backgroundColor: "#FFB197",
-                borderRadius: 50,
-                padding: 15,
-                height: 55,
-              }}
-              containerStyle={{
-                width: 200,
-                justifyContent: "center",
-                marginHorizontal: 90,
-              }}
-            />
-          )}
-          <View style={{ marginVertical: 10 }} />
-          <Button
-            title="Update"
-            onPress={handleUpdateUser}
-            buttonStyle={{
-              backgroundColor: "#FFB197",
-              borderRadius: 50,
-              padding: 15,
-              height: 55,
-            }}
-            containerStyle={{
-              width: 200,
-              justifyContent: "center",
-              marginHorizontal: 90,
-              marginVertical: 10,
-            }}
-          />
-          <View style={{ marginVertical: 10 }} />
-        </View>
       </View>
     </ScrollView>
   );
@@ -374,8 +426,7 @@ const stylesCamera = StyleSheet.create({
     justifyContent: "center",
   },
   camera: {
-    height: "80%",
-    width: "100%",
+    flex: 1,
   },
   buttonContainer: {
     backgroundColor: "transparent",
