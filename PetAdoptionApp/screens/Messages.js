@@ -5,6 +5,7 @@ export default function Messages() {
     return (
         <View>
             <Text>Messages Screen!</Text>
+            <Text>Coming Soon!</Text>
         </View>
     )
 }

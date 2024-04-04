@@ -62,7 +62,7 @@ export default function PetInfo() {
     const { data, error } = await supabase //fetching the data in supabase
       .from("pet_profiles") //the supabase table's name
       .select("*")
-      .eq("profiles_id", session.id); //select all statement( select * from)
+      // .eq("profiles_id", session.id); //select all statement( select * from)
     console.log(data);
 
     if (error) {

@@ -1,5 +1,5 @@
 import { Camera } from "expo-camera";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Button } from '@rneui/themed';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -8,6 +8,45 @@ import { supabase } from "../../lib/supabase";
 export default function App() {
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [camera, setCamera] = useState(null);
+  const [petProfiles, setPetProfiles] = useState(null);
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    fetchSession();
+    fetchPetProfiles();
+  }, []);
+
+  async function fetchSession() {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setSession(user);
+      console.log(user.id);
+    } catch (error) {
+      console.log("Error fetching session:", error.message);
+    }
+  }
+
+  async function fetchPetProfiles() {
+    await fetchSession();
+
+    const { data, error } = await supabase //fetching the data in supabase
+      .from("pet_profiles") //the supabase table's name
+      .select("*")
+      // .eq("profiles_id", session.id); //select all statement( select * from)
+      setPetProfiles(data);
+    console.log(data);
+
+    if (error) {
+      setPetProfiles(null); //setting to null so to reset the data
+      alert(error);
+    }
+    if (data) {
+      setPetProfiles(data);
+    }
+  }
+
 
   if (!permission) {
     // Camera permissions are still loading
@@ -39,6 +78,9 @@ export default function App() {
   }
 
   const captureImage = async () => {
+    await fetchPetProfiles();
+    await fetchSession();
+
     if (permission.granted) {
       const photo = await camera.takePictureAsync({ base64: true });
       //console.log("photo", photo);
@@ -51,17 +93,26 @@ export default function App() {
     const blob = await response.blob();
     const arrayBuffer = await new Response(blob).arrayBuffer();
     console.log("arrayBuffer", arrayBuffer.byteLength); //Tis code check if the image is captured
-    const fileName = `public/${Date.now()}.jpg`;
+    // const fileName = `public/${Date.now()}.jpg`;
+
+    const fileName = petProfiles.name + "_petPic.jpg";
+    // const filePath = session.user.id + `/` + fileName;
+
+    console.log(fileName);
+    // console.log(filePath);
+
+ 
 
     const { error } = await supabase.storage
       .from("petPhotos")
       .upload(fileName, arrayBuffer, {
         contentType: "image/jpeg",
-        upsert: false,
+        upsert: true,
       });
     if (error) {
       console.error("Error uploading image: ", error);
     }
+
   };
 
   return (
